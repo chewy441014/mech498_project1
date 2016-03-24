@@ -1,8 +1,6 @@
 <<<<<<< HEAD
 disp('helloworld')
-disp('Nathan was here')
 =======
-disp('helloworld')
 <<<<<<< HEAD
 'testing'
 =======
