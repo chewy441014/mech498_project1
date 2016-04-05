@@ -18,5 +18,7 @@ function [is_solution, ball_trajectory] = ballTrajectory(pos_ball, vel_ball, rob
     pos = [pos_ball(1) + vel_ball(1)*t + 1/2*a(1)*t.^2;...
         pos_ball(2) + vel_ball(2)*t + 1/2*a(2)*t.^2;...
         pos_ball(3) + vel_ball(3)*t + 1/2*a(3)*t.^2];
+    %???thinking the pos should be [vel_vall*cos(theta)*t,0, vel_ball(2)*sin(theta)*t - 1/2*g*t.^2]
+    %and don't think it needs for-loop
     ball_trajectory = pos(:,pos(3,:) > 0);
 end
