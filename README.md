@@ -11,11 +11,26 @@ George Zhu
 For questions:
 plh1@rice.edu
 
-Test edit
+List of Function
 
+simulateBasket(T_ball, vel_ball)
 
-%My name is George "Zhutopia" Zoo
+robot = basketInit()
 
-Testing MATLAB integration
+[is_solution, ball_trajectory] = ballTrajectory(T_ball, vel_ball, dt)
 
-TEST
+dunk_trajectory = createDunkTrajectory(robot)
+
+joint_angles_mat = controlBasketPID(theta_init, theta_ref, t_f, robot)
+
+[M, V, G] = basketDynamics(joint_angles, joint_vel)
+
+J = basketJacobian(joint_angles, robot)
+
+[T,robot_T] = basketFK(joint_angles,robot)
+
+[is_solution, joint_angles] = basketIK(T, prev_joint_angles, robot)
+
+T = dhtf(alpha, a, d, theta)
+
+drawBasket(joint_angles)
