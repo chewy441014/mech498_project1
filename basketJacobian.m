@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 function J = basketJacobian(joint_angles, robot)
 theta1=joint_angles(1);
 theta2=joint_angles(2);
@@ -27,4 +28,8 @@ J = [-(l2 + a3*c23 + l4*s23 + l3*c2)*s1, c1*(a3*(-s23)+l4*c23-l3*s2),c1*(a3*(-s2
     (l2 + a3*c23 + l4*s23 + l3*c2)*c1, s1*(a3*(-s23)+l4*c23-l3*s2),s1*(a3*(-s23)+l4*c23);
     0, a3*c23+l4*s23+l3*c2, a3*c23+l4*s23+l3*c2];
 
+=======
+function J = basketJacobian(joint_angles, robot)
+
+>>>>>>> origin/master
 end
