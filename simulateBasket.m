@@ -3,7 +3,7 @@ function simulateBasket(T_ball, vel_ball)
     
     robot = basketInit();
     
-    ball_trajectory = ballTrajectory(T_ball, vel_ball, dt);
+    ball_trajectory = ballTrajectory(T_ball, vel_ball, robot, dt);
     
     %Find intersection point and time when the ball arrives at the
     %intersection point
