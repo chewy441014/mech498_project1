@@ -15,8 +15,9 @@ d_4 = 0.03; % [m]
 rho=2.7*10^3; % kg/m^3
 
 
-robot.home_angles=[0;0;pi/2;0;0;0];
-robot.home_position=
+robot.home_angles=[0;0;pi/2;0;0];
+robot.home_position=[0;0;2.68];
+
 % Fill in FANUC D-H parameters and other necessary parameters 
 robot.parameters.l_1 = l_1;
 robot.parameters.l_2 = l_2;
