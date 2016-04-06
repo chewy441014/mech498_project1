@@ -14,6 +14,7 @@ home_position=robot.home_position;
 g=robot.const.g;
 
 intersection = [];
+t_intersection=
 
 vel_intersection=[vel_ball(1),vel_ball(2),vel_ball(3)-g*t_intersection];
 vx=vel_intersection(1);
