@@ -12,9 +12,13 @@ ball_trajectory = ballTrajectory(pos_ball, vel_ball, robot, dt);
 home_angles=robot.home_angles;
 home_position=robot.home_position;
 g=robot.const.g;
+vxb=vel_ball(1);
+vyb=vel_ball(2);
+vzb=vel_ball(3);
+%A=(vx*)
 
 intersection = [];
-t_intersection=
+%t_intersection=
 
 vel_intersection=[vel_ball(1),vel_ball(2),vel_ball(3)-g*t_intersection];
 vx=vel_intersection(1);
