@@ -114,6 +114,10 @@ set(L_6,'Parent',hg);
 T_6 = hgtransform('Parent',T_5,'Matrix',robot_T{6});
 set(hg,'Parent',T_6);
 
+% Create Ball
+ball = hggroup('Parent',ax);
+O = line(0,0,0,'Color',[0,0,0],'Marker','.','MarkerSize',50);
+set(O,'Parent',ball);
 
 % Render graphics
 set(gcf,'Renderer','openGL');
@@ -123,7 +127,7 @@ drawnow;
 
 
 % Return hgtransform handles
-handles = [T_1,T_2,T_3,T_4,T_5,T_6];
+handles = [T_1,T_2,T_3,T_4,T_5,T_6,ball];
 
     function h = drawRobotFrame( color )
          
