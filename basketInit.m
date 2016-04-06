@@ -30,7 +30,8 @@ robot.joint_limits{5} = [-120,120]*deg2rad;
 
 % Set bounds on the cartesian workspace of the FANUC for plotting in the
 % form:  [ xmin, xmax, ymin, ymax, zmin, zmax]
-robot.workspace = [-2739*cos(30), 2739, -2739, 2739, -1721, 2238];
+
+%robot.workspace = [-2739*cos(30), 2739, -2739, 2739, -1721, 2238];
 
 % Set colors to be drawn for each link and associated frame, including the
 % tool
@@ -43,7 +44,7 @@ robot.colors{6} = [0,1,1];
 robot.colors{7} = [0.75,0.75,0.75];
 
 %Basket goal location
-pos = [0.400; 0; 0.400]; %just a guesss [m]
+pos = [0.400; 0; 0.400]; %just a guess [m]
 orient = eye(3); %just a regular basketball goal for now
 robot.goal.pos_ore = [orient, pos; 0, 0, 0, 1];
 
