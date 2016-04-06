@@ -7,11 +7,29 @@ l_2 = 0.900; % [m]
 l_3 = 1.600; % [m]
 l_4 = 0.180; % [m]
 
+d_1 = 0.03; % [m]
+d_2 = 0.03; % [m]
+d_3 = 0.03; % [m]
+d_4 = 0.03; % [m]
+
+rho=2.7*10^3; % kg/m^3
+
+
 % Fill in FANUC D-H parameters and other necessary parameters 
 robot.parameters.l_1 = l_1;
 robot.parameters.l_2 = l_2;
 robot.parameters.l_3 = l_3;
 robot.parameters.l_4 = l_4;
+
+robot.parameters.d_1 = d_1;
+robot.parameters.d_2 = d_2;
+robot.parameters.d_3 = d_3;
+robot.parameters.d_4 = d_4;
+
+robot.parameters.m_1 = pi/4*d_1^2*l_1*rho;
+robot.parameters.m_2 = pi/4*d_2^2*l_2*rho;
+robot.parameters.m_3 = pi/4*d_3^2*l_3*rho;
+robot.parameters.m_4 = pi/4*d_4^2*l_4*rho;
 
 % Basket base (zero) frame relative to the "station" frame
 robot.base = makehgtform('translate',[0,0,l_1]);
