@@ -15,12 +15,38 @@ g=robot.const.g;
 vxb=vel_ball(1);
 vyb=vel_ball(2);
 vzb=vel_ball(3);
-%A=(vx*)
+totaltime=2*vzb/g;
+syms t
+A=(vxb*t)^2+(vyb*t)^2+(vzb*t-0.5*g*t^2-home_position(3))^2;
+B=2*vxb^2+2vyb^2+2*(vzb*t-0.5*g*t^2-home_position(3))*(vzb-g*t);
+dt=0.5*A^(-1/2)*B;
+d2t=-B^2/4*A^(-3/2)+0.5*A^(-1/2)*(2*(vzb-g*t)^2-2*g*(vzb*t-0.5*g*t^2-home_position(3)));
+t_intersect=solve(0.5*A^(-1/2)*B==0,t);
+tsol=[];
+if length(t_intersect)!=0
+    
+    for i=1:length(t_intersect)
+        if isreal(t_intersect(i))
+            if subs(d2t,t_intersect(i))>0
+                tsol=[tsol t_intersect(i)];
+            end
+        end
+                
+    end
+else
+    if home_position(3)<sqrt((vxb*totaltime)^2+(vyb*totaltime)^2+(vzb*totaltime-0.5*g*totaltime^2-home_position(3))^2)
+        tsol=0;
+    else
+        tsol=totaltime;
+    end
+end
+tsol=min(tsol);
 
-intersection = [];
-%t_intersection=
 
-vel_intersection=[vel_ball(1),vel_ball(2),vel_ball(3)-g*t_intersection];
+intersection = ball_trajectory(:,round(tsol/dt));
+t_intersection=tsol;
+
+vel_intersection=[vel_ball(1),vel_ball(2),vel_ball(3)-g*t_intersect];
 vx=vel_intersection(1);
 vy=vel_intersection(2);
 vz=vel_intersection(3);
