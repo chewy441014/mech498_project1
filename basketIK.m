@@ -10,7 +10,7 @@ function [is_solution, joint_angles] = basketIK(T, prev_joint_angles, robot)
 
 % Set this value to true to display every configuration possible when
 % fanucIK is called
-showAllConfigs = true;
+showAllConfigs = false;
 
 % Initialize joint_angles
 joint_angles = zeros(5,1);
