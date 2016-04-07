@@ -119,6 +119,38 @@ ball = hggroup('Parent',ax);
 O = line(0,0,0,'Color',[0,0,0],'Marker','.','MarkerSize',50);
 set(O,'Parent',ball);
 
+% Create Basket
+scale = 0.3;
+height = 2;
+loc = [0, 1.5, height*scale];
+goal = hggroup('Parent',ax);
+t = linspace(0,2*pi,200);
+x = scale*cos(t);
+y = scale*sin(t);
+p1 = line(x,y,zeros(length(t)),'Color','red','LineWidth',5); % Rim
+set(p1,'Parent',goal);
+p2 = line(0.5*x, 0.5*y, scale*-height*ones(length(t))); % Base
+set(p2,'Parent',goal);
+t = linspace(0,pi/4,100);
+for i = 0:15
+    x = scale*cos(t + i*pi/8).*(-t*2/pi + 1);
+    y = scale*sin(t + i*pi/8).*(-t*2/pi + 1);
+    z = scale*-t*4*(height)/pi;
+    p3 = line(x, y, z, 'Color','k','LineWidth',2);
+    set(p3,'Parent',goal);
+end
+t = linspace(0,pi/4,100);
+for i = 0:15
+    x = scale*sin(t + i*pi/8).*(-t*2/pi + 1);
+    y = scale*cos(t + i*pi/8).*(-t*2/pi + 1);
+    z = scale*-t*4*(height)/pi;
+    p4 = line(x, y, z,'Color', 'k','LineWidth',2);
+    set(p4,'Parent',goal);
+end
+T_goal = makehgtform('translate',loc);
+T = hgtransform('Parent',ax,'Matrix',T_goal);
+set(goal,'Parent',T);
+
 % Render graphics
 set(gcf,'Renderer','openGL');
 drawnow;
