@@ -34,7 +34,8 @@ if length(t_intersect)!=0
                 
     end
 else
-    if home_position(3)<sqrt((vxb*totaltime)^2+(vyb*totaltime)^2+(vzb*totaltime-0.5*g*totaltime^2-home_position(3))^2)
+    if home_position(3)<sqrt((vxb*totaltime)^2+(vyb*totaltime)^2+(vzb...
+        *totaltime-0.5*g*totaltime^2-home_position(3))^2)
         tsol=0;
     else
         tsol=totaltime;
@@ -44,7 +45,7 @@ tsol=min(tsol);
 
 
 intersection = ball_trajectory(:,round(tsol/dt));
-t_intersection=tsol;
+t_intersect=tsol;
 
 vel_intersection=[vel_ball(1),vel_ball(2),vel_ball(3)-g*t_intersect];
 vx=vel_intersection(1);
