@@ -1,4 +1,4 @@
-function J = basketJacobian(joint_angles, robot)
+function J = basketJacobian(joint_angles)
 theta1=joint_angles(1);
 theta2=joint_angles(2);
 theta3=joint_angles(3);
