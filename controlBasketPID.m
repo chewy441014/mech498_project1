@@ -26,13 +26,6 @@ kv4 = 100;
 kv5 = 100;
 Kv = diag([kv1; kv2; kv3; kv4; kv5]);
 
-% ki1 = 100;
-% ki2 = 100;
-% ki3 = 100;
-% ki4 = 100;
-% ki5 = 100;
-% Ki = diag([ki1; ki2; ki3; ki4; ki5]);
-
 n = length(time);
 dt = time(2) - time(1);
 X = zeros(10,n); % initialize variable to hold state vector
@@ -42,29 +35,27 @@ for i = 1:n
     if i == 1
         X(:,i) = [theta_init(:,1); theta_init(:,2)];
     else
-        X(:,i) = X(:,i-1);
+        %Joint Torques
+        joint_angles = X(1:5,i);
+        joint_vel = X(6:10,i);
+        tau = - Kp*(joint_angles - theta_ref(:,1))...
+            - Kv*(joint_vel - theta_ref(:,2));
+
+        % Apply joint torque limits
+        tau(tau>tau_max) = tau_max;
+        tau(tau<-tau_max) = -tau_max;
+
+        % Dynamic Model
+        [M,V,G] = basketDynamics(joint_angles, joint_vel, robot);
+        X_dot(1:5,i) = X(6:10,i);
+        X_dot(6:10,i) = M\(tau - V - G);
+
+        X(6:10,i) = X(6:10,i-1) + 0.5*(X_dot(6:10,i-1) ...
+            + X_dot(6:10,i))*dt;
+        X(1:5,i) = X(1:5,i-1) + 0.5*(X_dot(1:5,i-1) + ...
+            X_dot(1:5,i))*dt;
     end
-    
-    %Joint Torques
-    joint_angles = X(1:5,i);
-    joint_vel = X(6:10,i);
-    tau = - Kp*(joint_angles - theta_ref(:,1))...
-        - Kv*(joint_vel - theta_ref(:,2));
-    
-    % Apply joint torque limits
-    tau(tau>tau_max) = tau_max;
-    tau(tau<-tau_max) = -tau_max;
-    
-    % Dynamic Model
-    [M,V,G] = basketDynamics(joint_angles, joint_vel, robot);
-    X_dot(1:5,i) = X(6:10,i);
-    X_dot(6:10,i) = M\(tau - V - G);
-    
-    if i > 1
-        X(6:10,i) = X(6:10,i-1) + 0.5*(X_dot(6:10,i-1) + X_dot(6:10,i))*dt;
-        X(1:5,i) = X(1:5,i-1) + 0.5*(X_dot(1:5,i-1) + X_dot(1:5,i))*dt;
-    end
-    
+ 
 end
 %Theta Generated for each time step
 joint_angles_mat = X(1:5,:);
