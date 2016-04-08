@@ -36,8 +36,8 @@ for i = 1:n
         X(:,i) = [theta_init(:,1); theta_init(:,2)];
     else
         %Joint Torques
-        joint_angles = X(1:5,i);
-        joint_vel = X(6:10,i);
+        joint_angles = X(1:5,i-1);
+        joint_vel = X(6:10,i-1);
         tau = - Kp*(joint_angles - theta_ref(:,1))...
             - Kv*(joint_vel - theta_ref(:,2));
 
