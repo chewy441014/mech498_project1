@@ -27,6 +27,8 @@ ymax = robot.workspace(4);
 zmin = robot.workspace(5);
 zmax = robot.workspace(6);
 
+T(3,4) = T(3,4) - l_1;
+
 % Find point (px',py',pz') given (px,py,pz). This point corresponds to the
 % point at which frame 4 is located
 p_4 = T*[0; 0; -l_4; 1];
@@ -121,8 +123,8 @@ if(sqrt(px_4_1^2 + pz_4^2) < l_2 + l_3 ...
 else
     % If the point is not physically reachable, set the joint outside of
     % the joint limits so that the solution is thrown out
-    joint_sols(2,3) = 9000*pi;
-    joint_sols(2,4) = 9000*pi;
+    joint_sols(2,3) = 99999;
+    joint_sols(2,4) = 99999;
 end
 
 
@@ -164,7 +166,7 @@ for i = 1:size(joint_sols,2)
             joint_angles = joint_sols(:,i);
         end
     else
-        disp(i);
+%         disp(i);
     end
 end
 % If no solution is within the joint limits
@@ -182,8 +184,8 @@ end
         isOutOfBounds = false;
         for joint = 1:5
             if((joint_angles(joint) < robot.joint_limits{joint}(1)) || (joint_angles(joint) > robot.joint_limits{joint}(2)))
-                fprintf('Joint %d is out of bounds\n',joint)
-                fprintf('Joint: %f, Limit1: %f, Limit2: %f\n\n',joint_angles(joint),robot.joint_limits{joint}(1), robot.joint_limits{joint}(2));
+%                 fprintf('Joint %d is out of bounds\n',joint)
+%                 fprintf('Joint: %f, Limit1: %f, Limit2: %f\n\n',joint_angles(joint),robot.joint_limits{joint}(1), robot.joint_limits{joint}(2));
                 isOutOfBounds = true;
                 return;
             end

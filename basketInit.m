@@ -12,11 +12,11 @@ d_2 = 0.03; % [m]
 d_3 = 0.03; % [m]
 d_4 = 0.03; % [m]
 
-rho=2.7*10^3; % kg/m^3
+rho = 2.7*10^3; % kg/m^3
 
 
-robot.home_angles=[0;0;pi/2;0;0];
-robot.home_position=[0;0;2.68];
+% robot.home_angles = [0;0;pi/2;0;0];
+% robot.home_position = [0;0;2.68];
 
 % Fill in FANUC D-H parameters and other necessary parameters 
 robot.parameters.l_1 = l_1;
@@ -39,11 +39,11 @@ robot.base = makehgtform('translate',[0,0,l_1]);
 
 % Basket joint limits (deg) (range then speed?)
 deg2rad = pi/180;
-robot.joint_limits{1} = [-150,150]*deg2rad;
-robot.joint_limits{2} = [-80,80]*deg2rad;
-robot.joint_limits{3} = [-80,80]*deg2rad;
-robot.joint_limits{4} = [-240,240]*deg2rad;
-robot.joint_limits{5} = [-120,120]*deg2rad;
+robot.joint_limits{1} = [-180,180]*deg2rad;
+robot.joint_limits{2} = [-180,180]*deg2rad;
+robot.joint_limits{3} = [-180,180]*deg2rad;
+robot.joint_limits{4} = [-180,180]*deg2rad;
+robot.joint_limits{5} = [-180,180]*deg2rad;
 
 % Set bounds on the cartesian workspace of the robot for plotting in the
 % form:  [ xmin, xmax, ymin, ymax, zmin, zmax]
@@ -59,9 +59,7 @@ robot.colors{5} = [1,0,1];
 robot.colors{6} = [0,1,1];
 
 %Basket goal location
-pos = [0.400; 0; 0.400]; %just a guess [m]
-orient = eye(3); %just a regular basketball goal for now
-robot.goal.pos_ore = [orient, pos; 0, 0, 0, 1];
+robot.goal.pos = [0; 1.5; 2];
 
 %Ball Mass
 robot.ball.mass = 2; %[kg]

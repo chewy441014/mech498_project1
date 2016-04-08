@@ -122,15 +122,15 @@ set(O,'Parent',ball);
 % Create Basket
 scale = 0.3;
 height = 2;
-loc = [0, 1.5, height*scale];
+loc = robot.goal.pos;
 goal = hggroup('Parent',ax);
 t = linspace(0,2*pi,200);
 x = scale*cos(t);
 y = scale*sin(t);
 p1 = line(x,y,zeros(length(t)),'Color','red','LineWidth',5); % Rim
 set(p1,'Parent',goal);
-p2 = line(0.5*x, 0.5*y, scale*-height*ones(length(t))); % Base
-set(p2,'Parent',goal);
+% p2 = line(0.5*x, 0.5*y, scale*-height*ones(length(t))); % Base
+% set(p2,'Parent',goal);
 t = linspace(0,pi/4,100);
 for i = 0:15
     x = scale*cos(t + i*pi/8).*(-t*2/pi + 1);
