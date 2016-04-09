@@ -1,7 +1,5 @@
 function simulateBasket(pos_ball, vel_ball)
 dt = 0.01;
-% vel_2_intersect=2; %set velocity for robot to move to intersection point
-%used for determining t_f
 
 robot = basketInit();
 l_1 = robot.parameters.l_1;
@@ -11,10 +9,11 @@ l_4 = robot.parameters.l_4;
 
 [~,ball_traj] = ballTrajectory(pos_ball, vel_ball, robot, dt);
 home_pos = [l_3+l_4; 0; l_1+l_2];
-home_angles=[0 pi/2 0 0 0];
+home_angles = robot.home_angles;
 
 smallest_dist = 99999999;
 intersect_dt = 0;
+intersect_time = 0;
 for i = 1:size(ball_traj,2)
     dist = norm(home_pos - ball_traj(:,i));
     if(dist < smallest_dist)
@@ -101,7 +100,7 @@ plot3(ball_traj(1,:),ball_traj(2,:),ball_traj(3,:),'.:');
 %
 % joint_angles_intersection = basketIK(Tball, home_angles, robot);
 
-t_f=ceil((ball_traj(:,intersect_dt)-home_position)/vel_2_intersect);
+t_f = intersect_time;
 
 K_p=[100; 100; 100; 100; 100];
 K_v=[100; 100; 100; 100; 100];
