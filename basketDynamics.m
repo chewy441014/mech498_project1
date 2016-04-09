@@ -10,7 +10,7 @@ t4 = joint_angles(4);
 t5 = joint_angles(5);
 
 %Robot parameters
-g = robot.parameters.g;
+g = robot.const.g;
 m_1 = robot.parameters.m_1;
 m_2 = robot.parameters.m_2;
 m_3 = robot.parameters.m_3;
@@ -31,15 +31,15 @@ l_4 = robot.parameters.l_4;
 G1 = 0;
 
 G2 = -m_2*l_2*g*sin(t2s)/2-m_3*g*l_2*sin(t2s)+m_3*g*l_3/2*cos(t2s+t3)...
-    -m_4*g*l_2*sin(t2s)+m_4*g*l_3*cos(t2s+t3)+m_4*g*l_4/2*cos(t2s+t3+t5)...
-    -m_5*g*l_2*sin(t2s)+m_5*g*l_3*cos(t2s+t3)+m_5*g*l_4*cos(t2s+t3+t5);
+    -m_4*g*l_2*sin(t2s)+m_4*g*l_3*cos(t2s+t3)+m_4*g*l_4/2*cos(t4)*cos(t2s+t3+t5)...
+    -m_5*g*l_2*sin(t2s)+m_5*g*l_3*cos(t2s+t3)+m_5*g*l_4*cos(t4)*cos(t2s+t3+t5);
 
-G3 = m_3*g*l_3/2*cos(t2s+t3)+m_4*g*l_3*cos(t2s+t3)+m_4*g*l_4/2*cos(t2s+t3+t5)...
-    +m_5*g*l_3*cos(t2s+t3)+m_5*g*l_4*cos(t2s+t3+t5);
+G3 = m_3*g*l_3/2*cos(t2s+t3)+m_4*g*l_3*cos(t2s+t3)+m_4*g*l_4/2*cos(t4)*cos(t2s+t3+t5)...
+    +m_5*g*l_3*cos(t2s+t3)+m_5*g*l_4*cos(t4)*cos(t2s+t3+t5);
 
-G4 = 0;
+G4 = -m_4*l_4*g/2*sin(t4)*sin(t2s+t3+t5)-m_5*g*l_4*sin(t4)*sin(t2s+t3+t5);
 
-G5 = m_4*g*l_4/2*cos(t2s+t3+t5)+m_5*g*l_4*cos(t2s+t3+t5);
+G5 = m_4*g*l_4/2*cos(t4)*cos(t2s+t3+t5)+m_5*g*l_4*cos(t4)*cos(t2s+t3+t5);
 
 G=[G1;G2;G3;G4;G5];
 
