@@ -1,5 +1,5 @@
 syms d_the1 d_the2 d_the3 d_the4 d_the5 dd_the1 dd_the2 dd_the3 ...
-    dd_the4 dd_the5 the1 the2 the3 the4 the5
+    dd_the4 dd_the5 the1 the2 the3 the4 the5 m1 m2 m3 m4 m5 m6 m7 g
 
 assume(the1,'real')
 assume(the2,'real')
@@ -19,30 +19,22 @@ assume(dd_the5,'real')
 
 basket = basketInit;
 
-m1 = vpa(basket.parameters.m_1,3); %between {0} and {1}
-m2 = 0;                            %between {1} and {2}
-m3 = vpa(basket.parameters.m_2,3); %between {2} and {3}
-m4 = vpa(basket.parameters.m_3,3); %between {3} and {4}
-m5 = 0;                            %between {4} and {5}
-m6 = vpa(basket.parameters.m_4,3); %between {5} and {6}
-m7 = vpa(basket.ball.mass,3);      %AT {6}
-
 joint_angles = [the1, the2, the3, the4, the5];
 [~,basket_T] = basketFK(joint_angles, basket);
 
-R01 = vpa(basket_T{1}(1:3,1:3),3)';
-R12 = vpa(basket_T{2}(1:3,1:3),3)';
-R23 = vpa(basket_T{3}(1:3,1:3),3)';
-R34 = vpa(basket_T{4}(1:3,1:3),3)';
-R45 = vpa(basket_T{5}(1:3,1:3),3)';
-R56 = vpa(basket_T{6}(1:3,1:3),3)';
+R01 = basket_T{1}(1:3,1:3)';
+R12 = basket_T{2}(1:3,1:3)';
+R23 = basket_T{3}(1:3,1:3)';
+R34 = basket_T{4}(1:3,1:3)';
+R45 = basket_T{5}(1:3,1:3)';
+R56 = basket_T{6}(1:3,1:3)';
 
-P01 = vpa(basket_T{1}(1:3,4),3);
-P12 = vpa(basket_T{2}(1:3,4),3);
-P23 = vpa(basket_T{3}(1:3,4),3);
-P34 = vpa(basket_T{4}(1:3,4),3);
-P45 = vpa(basket_T{5}(1:3,4),3);
-P56 = vpa(basket_T{6}(1:3,4),3);
+P01 = basket_T{1}(1:3,4);
+P12 = basket_T{2}(1:3,4);
+P23 = basket_T{3}(1:3,4);
+P34 = basket_T{4}(1:3,4);
+P45 = basket_T{5}(1:3,4);
+P56 = basket_T{6}(1:3,4);
 
 Pc11 = P01/2;
 Pc22 = P12/2;
@@ -107,9 +99,52 @@ n33 = N33 + R34'*n44 + cross(Pc44,F33) + cross(P34,R34'*f44);
 n22 = N22 + R23'*n33 + cross(Pc33,F22) + cross(P23,R23'*f33);
 n11 = N11 + R12'*n22 + cross(Pc22,F11) + cross(P12,R12'*f22);
 
-tau6 = [0; 0; n66];
-tau5 = [0; 0; n55];
-tau4 = [0; 0; n44];
-tau3 = [0; 0; n33];
-tau2 = [0; 0; n22];
-tau1 = [0; 0; n11];
+tau6 = n66(3);
+tau5 = n55(3);
+tau4 = n44(3);
+tau3 = n33(3);
+tau2 = n22(3);
+tau1 = n11(3);
+
+tau1 = expand(tau1);
+tau2 = expand(tau2);
+tau3 = expand(tau3);
+tau4 = expand(tau4);
+tau5 = expand(tau5);
+
+C_tau1_dd_the1 = coeffs(tau1,dd_the1); C_tau1_dd_the1 = C_tau1_dd_the1(2);
+C_tau1_dd_the2 = coeffs(tau1,dd_the2); C_tau1_dd_the2 = C_tau1_dd_the2(2);
+C_tau1_dd_the3 = coeffs(tau1,dd_the3); C_tau1_dd_the3 = C_tau1_dd_the3(2);
+C_tau1_dd_the4 = coeffs(tau1,dd_the4); C_tau1_dd_the4 = C_tau1_dd_the4(2);
+C_tau1_dd_the5 = coeffs(tau1,dd_the5); C_tau1_dd_the5 = C_tau1_dd_the5(2);
+
+C_tau2_dd_the1 = coeffs(tau2,dd_the1); C_tau2_dd_the1 = C_tau2_dd_the1(2);
+C_tau2_dd_the2 = coeffs(tau2,dd_the2); C_tau2_dd_the2 = C_tau2_dd_the2(2);
+C_tau2_dd_the3 = coeffs(tau2,dd_the3); C_tau2_dd_the3 = C_tau2_dd_the3(2);
+C_tau2_dd_the4 = coeffs(tau2,dd_the4); C_tau2_dd_the4 = C_tau2_dd_the4(2);
+C_tau2_dd_the5 = coeffs(tau2,dd_the5); C_tau2_dd_the5 = C_tau2_dd_the5(2);
+
+C_tau3_dd_the1 = coeffs(tau3,dd_the1); C_tau3_dd_the1 = C_tau3_dd_the1(2);
+C_tau3_dd_the2 = coeffs(tau3,dd_the2); C_tau3_dd_the2 = C_tau3_dd_the2(2);
+C_tau3_dd_the3 = coeffs(tau3,dd_the3); C_tau3_dd_the3 = C_tau3_dd_the3(2);
+C_tau3_dd_the4 = coeffs(tau3,dd_the4); C_tau3_dd_the4 = C_tau3_dd_the4(2);
+C_tau3_dd_the5 = coeffs(tau3,dd_the5); C_tau3_dd_the5 = C_tau3_dd_the5(2);
+
+C_tau4_dd_the1 = coeffs(tau4,dd_the1); C_tau4_dd_the1 = C_tau4_dd_the1(2);
+C_tau4_dd_the2 = coeffs(tau4,dd_the2); C_tau4_dd_the2 = C_tau4_dd_the2(2);
+C_tau4_dd_the3 = coeffs(tau4,dd_the3); C_tau4_dd_the3 = C_tau4_dd_the3(2);
+C_tau4_dd_the4 = coeffs(tau4,dd_the4); C_tau4_dd_the4 = C_tau4_dd_the4(2);
+C_tau4_dd_the5 = 0;
+
+C_tau5_dd_the1 = coeffs(tau5,dd_the1); C_tau5_dd_the1 = C_tau5_dd_the1(2);
+C_tau5_dd_the2 = coeffs(tau5,dd_the2); C_tau5_dd_the2 = C_tau5_dd_the2(2);
+C_tau5_dd_the3 = coeffs(tau5,dd_the3); C_tau5_dd_the3 = C_tau5_dd_the3(2);
+C_tau5_dd_the4 = 0;
+C_tau5_dd_the5 = coeffs(tau5,dd_the5); C_tau5_dd_the5 = C_tau5_dd_the5(2);
+
+M = [C_tau1_dd_the1, C_tau1_dd_the2, C_tau1_dd_the3, C_tau1_dd_the4, C_tau1_dd_the5; ...
+    C_tau2_dd_the1, C_tau2_dd_the2, C_tau2_dd_the3, C_tau2_dd_the4, C_tau2_dd_the5; ...
+    C_tau3_dd_the1, C_tau3_dd_the2, C_tau3_dd_the3, C_tau3_dd_the4, C_tau3_dd_the5; ...
+    C_tau4_dd_the1, C_tau4_dd_the2, C_tau4_dd_the3, C_tau4_dd_the4, C_tau4_dd_the5; ...
+    C_tau5_dd_the1, C_tau5_dd_the2, C_tau5_dd_the3, C_tau5_dd_the4, C_tau5_dd_the5];
+

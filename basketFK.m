@@ -19,7 +19,7 @@ l_4 = robot.parameters.l_4;
 
 % Generate transforms between each frame
 T_01 = dhtf(0, 0, 0, t_1);
-T_12 = dhtf(sym(pi/2), 0, 0, t_2 + sym(pi)/2);
+T_12 = dhtf(sym(pi)/2, 0, 0, t_2 + sym(pi)/2);
 T_23 = dhtf(0, l_2, 0, t_3);
 T_34 = dhtf(sym(pi)/2, 0, l_3, t_4);
 T_45 = dhtf(-sym(pi)/2, 0, 0, t_5 - sym(pi)/2);
