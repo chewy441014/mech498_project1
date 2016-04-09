@@ -105,6 +105,7 @@ t_f = intersect_time;
 K_p = [100; 100; 100; 100; 100];
 K_v = [100; 100; 100; 100; 100];
 %Moving to the Ball Intersection Location - PID control
+<<<<<<< HEAD
 prev_joint_angles = home_angles;
 [is_sol, joint_angles] = basketIK(T, prev_joint_angles, robot);
 theta_init = [home_angles zeros(5,1)];%5*2 matrix, first column start joint angles
@@ -114,6 +115,19 @@ time1 = 0:dt:t_f;
 %Theta_init is the zero position of the robot
 [joint_angles_mat1,~] = controlBasketPID(theta_init, theta_ref,  K_p, K_v, time1, robot);
 end_angles = joint_angles_mat1(:,t_f/dt+1);
+=======
+prev_joint_angles=home_angles;
+[is_sol, joint_angles] = basketIK(position, prev_joint_angles, robot);
+theta_init=[home_angles zeros(5,1)];%5*2 matrix, first column start joint angles
+theta_ref=[joint_angles zeros(5,1)]; %5*2 matrix, first column intersection point
+time1=0:dt:t_f;
+
+%Theta_ref is the intersection point
+%Theta_init is the zero position of the robot
+[joint_angles_mat1,~] = controlBasketPID(theta_init, theta_ref,  K_p, K_v, time1, robot);
+
+end_angles=joint_angles_mat1(:,t_f/dt+1);
+>>>>>>> origin/master
 %Catching the Ball and Remaining Stationary (Impulse Input)
 
 
@@ -125,6 +139,7 @@ t_im = 2;%time for catching the ball, change if needed
 [joint_angles_im, joint_velocities_im] = ...
     controlBasketImpulse(end_angles, robot, tangent, dt);
 
+<<<<<<< HEAD
 K_p2 = [1000; 1000; 1000; 1000; 1000];
 K_v2 = [200; 200; 200; 200; 200];
 time2 = 0:dt:t_im;
@@ -144,6 +159,26 @@ for k = time3
     %Theta_init is the zero position of the robot
     [joint_angles_mat3,~] = controlBasketPID(theta_init, theta_ref,  K_p, K_v, time3, robot);
 end
+=======
+K_p2=[1000; 1000; 1000; 1000; 1000];
+K_v2=[200; 200; 200; 200; 200];
+time2=0:dt:t_im;
+
+[joint_angles_mat2,~] = controlBasketPID([joint_angles_im , joint_velocities_im],...
+    [end_angles zeros(5,1)], K_p2, K_v2, time2, robot);
+
+end_angles=joint_angles_mat2(:,t_im/dt+1);
+t_f2=t_f; %time to move back, change if necessary
+%Moving to the Pre-Basket Position
+theta_init=[end_angles zeros(5,1)];
+theta_ref=[home_angles zeros(5,1)];
+time3=0:dt:t_f2;
+
+%Theta_ref is the intersection point
+%Theta_init is the zero position of the robot
+[joint_angles_mat3,~] = controlBasketPID(theta_init, theta_ref,  K_p, K_v, time3, robot);
+
+>>>>>>> origin/master
 
 end_angles = joint_angles_mat3(:,t_f2/dt+1);
 %Control Law for Dunking
