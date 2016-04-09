@@ -57,14 +57,14 @@ wd44 = R34*wd33 + cross(R34*w33,[0; 0; d_the4]) + [0; 0; dd_the4];
 wd55 = R45*wd44 + cross(R45*w44,[0; 0; d_the5]) + [0; 0; dd_the5];
 wd66 = R56*wd55 + cross(R56*w55,[0; 0; 0]);
 
-vd11 = [0; 0; 0];
+vd11 = [0; 0; g];
 vd22 = R12*(cross(wd11,P12) + cross(w11,cross(w11,P12)) + vd11);
 vd33 = R23*(cross(wd22,P23) + cross(w22,cross(w22,P23)) + vd22);
 vd44 = R34*(cross(wd33,P34) + cross(w33,cross(w33,P34)) + vd33);
 vd55 = R45*(cross(wd44,P45) + cross(w44,cross(w44,P45)) + vd44);
 vd66 = R56*(cross(wd55,P56) + cross(w55,cross(w55,P56)) + vd55);
 
-vdc11 = [0; 0; 0];
+vdc11 = [0; 0; g];
 vdc22 = cross(wd22,Pc22) + cross(w22,cross(w22,Pc22)) + vd22;
 vdc33 = cross(wd33,Pc33) + cross(w33,cross(w33,Pc33)) + vd33;
 vdc44 = cross(wd44,Pc44) + cross(w44,cross(w44,Pc44)) + vd44;
@@ -147,4 +147,12 @@ M = [C_tau1_dd_the1, C_tau1_dd_the2, C_tau1_dd_the3, C_tau1_dd_the4, C_tau1_dd_t
     C_tau3_dd_the1, C_tau3_dd_the2, C_tau3_dd_the3, C_tau3_dd_the4, C_tau3_dd_the5; ...
     C_tau4_dd_the1, C_tau4_dd_the2, C_tau4_dd_the3, C_tau4_dd_the4, C_tau4_dd_the5; ...
     C_tau5_dd_the1, C_tau5_dd_the2, C_tau5_dd_the3, C_tau5_dd_the4, C_tau5_dd_the5];
+
+V_tau1 = coeffs(tau1,[dd_the1,dd_the2,dd_the3,dd_the4,dd_the5]); V_tau1 = V_tau1(end);
+V_tau2 = coeffs(tau2,[dd_the1,dd_the2,dd_the3,dd_the4,dd_the5]); V_tau2 = V_tau2(end);
+V_tau3 = coeffs(tau3,[dd_the1,dd_the2,dd_the3,dd_the4,dd_the5]); V_tau3 = V_tau3(end);
+V_tau4 = coeffs(tau4,[dd_the1,dd_the2,dd_the3,dd_the4,dd_the5]); V_tau4 = V_tau4(end);
+V_tau5 = coeffs(tau5,[dd_the1,dd_the2,dd_the3,dd_the4,dd_the5]); V_tau5 = V_tau5(end);
+
+V = [V_tau1; V_tau2; V_tau3; V_tau4; V_tau5];
 
