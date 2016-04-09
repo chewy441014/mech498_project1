@@ -33,6 +33,22 @@ end
 % close(robotVideo);
 
 %%
+robot = basketInit();
+t = 0:0.01:10;
+theta_init = [0; -pi/3; 0; 0; pi/3];
+theta_init(:,2) = zeros(5,1);
+theta_ref = [pi/6; 0; 0; 0; 0];
+theta_ref(:,2) = zeros(5,1);
+[joint_pos, joint_vel] = controlBasketPID(theta_init, theta_ref, zeros(5,1), zeros(5,1),t, robot);
+
+robot.handles = drawBasket([0 0 0 0 0],robot);
+for t = 1:length(t)
+    setBasket(joint_pos(:,t),robot);
+end
+
+
+
+%%
 pos_ball = [4 0 0];
 vel_ball = [-2 0 10];
 simulateBasket(pos_ball, vel_ball);
