@@ -11,6 +11,7 @@ l_4 = robot.parameters.l_4;
 
 [~,ball_traj] = ballTrajectory(pos_ball, vel_ball, robot, dt);
 home_pos = [l_3+l_4; 0; l_1+l_2];
+home_angles=[0 pi/2 0 0 0];
 
 smallest_dist = 99999999;
 intersect_dt = 0;
@@ -57,14 +58,14 @@ plot3(ball_traj(1,:),ball_traj(2,:),ball_traj(3,:),'.:');
 % t_intersect=solve(0.5*A^(-1/2)*B==0,t);
 % tsol=[];
 % if length(t_intersect)!=0
-%     
+%
 %     for i=1:length(t_intersect)
 %         if isreal(t_intersect(i))
 %             if subs(d2t,t_intersect(i))>0
 %                 tsol=[tsol t_intersect(i)];
 %             end
 %         end
-%                 
+%
 %     end
 % else
 %     if home_position(3)<sqrt((vxb*totaltime)^2+(vyb*totaltime)^2+(vzb...
@@ -75,11 +76,11 @@ plot3(ball_traj(1,:),ball_traj(2,:),ball_traj(3,:),'.:');
 %     end
 % end
 % tsol=min(tsol);
-% 
-% 
+%
+%
 % intersection = ball_trajectory(:,round(tsol/dt));
 % t_intersect=tsol;
-% 
+%
 % vel_intersection=[vel_ball(1),vel_ball(2),vel_ball(3)-g*t_intersect];
 % vx=vel_intersection(1);
 % vy=vel_intersection(2);
@@ -88,7 +89,7 @@ plot3(ball_traj(1,:),ball_traj(2,:),ball_traj(3,:),'.:');
 % roll=ball_angles(1)+pi;
 % yaw=ball_angles(2)+pi;
 % pitch=ball_angels(3)+pi;
-% 
+%
 % Rx=[1 0 0; 0 cos(roll) -sin(roll); 0 sin(roll) cos(roll)];
 % Ry=[cos(pitch) 0 sin(pitch);0 1 0;-sin(pitch) 0 cos(pitch)];
 % Rz=[cos(yaw) -sin(yaw) 0;sin(yaw) cos(yaw) 0;0 0 1];
@@ -97,28 +98,83 @@ plot3(ball_traj(1,:),ball_traj(2,:),ball_traj(3,:),'.:');
 % Tball(1:3,1:3)=R;
 % Tball(4,4)=1;
 % Tball(1:3,4)=intersection;
-% 
+%
 % joint_angles_intersection = basketIK(Tball, home_angles, robot);
 
-t_f=ceil((intersection-home_position)/vel_2_intersect);
-i=0:dt:t_f;
+t_f=ceil((ball_traj(:,intersect_dt)-home_position)/vel_2_intersect);
 
+K_p=[100; 100; 100; 100; 100];
+K_v=[100; 100; 100; 100; 100];
 %Moving to the Ball Intersection Location - PID control
 prev_joint_angles=home_angles;
 [is_sol, joint_angles] = basketIK(position, prev_joint_angles, robot);
-for i = 1:dt:t_f
+theta_init=[home_angles zeros(5,1)];%5*2 matrix, first column start joint angles
+theta_ref=[joint_angles zeros(5,1)]; %5*2 matrix, first column intersection point
+time1=0:dt:t_f;
+for i = time1
     %Theta_ref is the intersection point
     %Theta_init is the zero position of the robot
-    joint_angles_mat = controlBasketPID(theta_init, theta_ref, t_f, robot);
+    [joint_angles_mat1,~] = controlBasketPID(theta_init, theta_ref,  K_p, K_v, time, robot);
 end
-
+end_angles=joint_angles_mat1(:,t_f/dt+1);
 %Catching the Ball and Remaining Stationary (Impulse Input)
 
-%Moving to the Pre-Basket Position
+t_im=2;%time for catching the ball, change if needed
 
+[joint_angles_im, joint_velocities_im] = ...
+    controlBasketImpulse(end_angles, robot, tangent, dt);
+
+K_p2=[1000; 1000; 1000; 1000; 1000];
+K_v2=[200; 200; 200; 200; 200];
+time2=0:dt:t_im;
+for j=time2
+    [joint_angles_mat2,~] = controlBasketPID([joint_angles_im , joint_velocities_im],...
+        [end_angles zeros(5,1)], K_p2, K_v2, time, robot);
+    
+end
+end_angles=joint_angles_mat2(:,t_im/dt+1);
+t_f2=t_f; %time to move back, change if necessary
+%Moving to the Pre-Basket Position
+theta_init=[end_angles zeros(5,1)];
+theta_ref=[home_angles zeros(5,1)];
+time3=0:dt:t_f2;
+for k = time3
+    %Theta_ref is the intersection point
+    %Theta_init is the zero position of the robot
+    [joint_angles_mat3,~] = controlBasketPID(theta_init, theta_ref,  K_p, K_v, time, robot);
+end
+
+end_angles=joint_angles_mat3(:,t_f2/dt+1);
 %Control Law for Dunking
+
+
+dunk_trajectory = createDunkTrajectory(end_angles);
+theta_init=[end_angles zeros(5,1)];
+dunk_angles=zeros(5,size(dunk_trajectory,2));
+for i=1:size(dunk_trajectory,2)
+    theta_ref=dunk_trajectory(:,i);
+    theta_ref_dot=(theta_ref-dunk_trajectory(:,i-1))/dt;
+    theta_ref=[theta_ref theta_ref_dot];
+    [joint_angles4, joint_velocities_mat4] = ...
+        controlBasketPID(theta_init, theta_ref, K_p, K_v, [0 dt/2], robot)
+    theta_init=[joint_angles4(:,2) joint_velocities_mat4(:,2)];
+    dunk_angles(:,i)=joint_angles4(:,2);
+end
 
 %Draw the Robot
 
+[ handles ] = drawBasket( home_angles, robot )
+for i=time1
+    setBasket(joint_angles_mat1(:,i), robot)
+end
+for i=time2
+    setBasket(joint_angles_mat2(:,i), robot)
+end
+for i=time3
+    setBasket(joint_angles_mat3(:,i), robot)
+end
+for i=1:size(dunk_trajectory,2)
+    setBasket(dunk_angles(:,i), robot)
+end
 
 end
