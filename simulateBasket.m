@@ -113,7 +113,7 @@ time1=0:dt:t_f;
 for i = time1
     %Theta_ref is the intersection point
     %Theta_init is the zero position of the robot
-    [joint_angles_mat1,~] = controlBasketPID(theta_init, theta_ref,  K_p, K_v, time, robot);
+    [joint_angles_mat1,~] = controlBasketPID(theta_init, theta_ref,  K_p, K_v, time1, robot);
 end
 end_angles=joint_angles_mat1(:,t_f/dt+1);
 %Catching the Ball and Remaining Stationary (Impulse Input)
@@ -128,7 +128,7 @@ K_v2=[200; 200; 200; 200; 200];
 time2=0:dt:t_im;
 for j=time2
     [joint_angles_mat2,~] = controlBasketPID([joint_angles_im , joint_velocities_im],...
-        [end_angles zeros(5,1)], K_p2, K_v2, time, robot);
+        [end_angles zeros(5,1)], K_p2, K_v2, time2, robot);
     
 end
 end_angles=joint_angles_mat2(:,t_im/dt+1);
@@ -140,7 +140,7 @@ time3=0:dt:t_f2;
 for k = time3
     %Theta_ref is the intersection point
     %Theta_init is the zero position of the robot
-    [joint_angles_mat3,~] = controlBasketPID(theta_init, theta_ref,  K_p, K_v, time, robot);
+    [joint_angles_mat3,~] = controlBasketPID(theta_init, theta_ref,  K_p, K_v, time3, robot);
 end
 
 end_angles=joint_angles_mat3(:,t_f2/dt+1);
