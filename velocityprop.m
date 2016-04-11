@@ -64,7 +64,7 @@ vd44 = R34*(cross(wd33,P34) + cross(w33,cross(w33,P34)) + vd33);
 vd55 = R45*(cross(wd44,P45) + cross(w44,cross(w44,P45)) + vd44);
 vd66 = R56*(cross(wd55,P56) + cross(w55,cross(w55,P56)) + vd55);
 
-vdc11 = [0; 0; g];
+vdc11 = [0; 0; 0];
 vdc22 = cross(wd22,Pc22) + cross(w22,cross(w22,Pc22)) + vd22;
 vdc33 = cross(wd33,Pc33) + cross(w33,cross(w33,Pc33)) + vd33;
 vdc44 = cross(wd44,Pc44) + cross(w44,cross(w44,Pc44)) + vd44;
@@ -106,53 +106,56 @@ tau3 = n33(3);
 tau2 = n22(3);
 tau1 = n11(3);
 
-tau1 = expand(tau1);
-tau2 = expand(tau2);
-tau3 = expand(tau3);
-tau4 = expand(tau4);
-tau5 = expand(tau5);
+tau1 = expand(tau1)
+tau2 = expand(tau2)
+tau3 = expand(tau3)
+tau4 = expand(tau4)
+tau5 = expand(tau5)
+return
 
-C_tau1_dd_the1 = coeffs(tau1,dd_the1); C_tau1_dd_the1 = C_tau1_dd_the1(2);
-C_tau1_dd_the2 = coeffs(tau1,dd_the2); C_tau1_dd_the2 = C_tau1_dd_the2(2);
-C_tau1_dd_the3 = coeffs(tau1,dd_the3); C_tau1_dd_the3 = C_tau1_dd_the3(2);
-C_tau1_dd_the4 = coeffs(tau1,dd_the4); C_tau1_dd_the4 = C_tau1_dd_the4(2);
-C_tau1_dd_the5 = coeffs(tau1,dd_the5); C_tau1_dd_the5 = C_tau1_dd_the5(2);
+% C_tau1_dd_the1 = coeffs(tau1,dd_the1); C_tau1_dd_the1 = C_tau1_dd_the1(2);
+% C_tau1_dd_the2 = coeffs(tau1,dd_the2); C_tau1_dd_the2 = C_tau1_dd_the2(2);
+% C_tau1_dd_the3 = coeffs(tau1,dd_the3); C_tau1_dd_the3 = C_tau1_dd_the3(2);
+% C_tau1_dd_the4 = coeffs(tau1,dd_the4); C_tau1_dd_the4 = C_tau1_dd_the4(2);
+% C_tau1_dd_the5 = coeffs(tau1,dd_the5); C_tau1_dd_the5 = C_tau1_dd_the5(2);
+% 
+% C_tau2_dd_the1 = coeffs(tau2,dd_the1); C_tau2_dd_the1 = C_tau2_dd_the1(2);
+% C_tau2_dd_the2 = coeffs(tau2,dd_the2); C_tau2_dd_the2 = C_tau2_dd_the2(2);
+% C_tau2_dd_the3 = coeffs(tau2,dd_the3); C_tau2_dd_the3 = C_tau2_dd_the3(2);
+% C_tau2_dd_the4 = coeffs(tau2,dd_the4); C_tau2_dd_the4 = C_tau2_dd_the4(2);
+% C_tau2_dd_the5 = coeffs(tau2,dd_the5); C_tau2_dd_the5 = C_tau2_dd_the5(2);
+% 
+% C_tau3_dd_the1 = coeffs(tau3,dd_the1); C_tau3_dd_the1 = C_tau3_dd_the1(2);
+% C_tau3_dd_the2 = coeffs(tau3,dd_the2); C_tau3_dd_the2 = C_tau3_dd_the2(2);
+% C_tau3_dd_the3 = coeffs(tau3,dd_the3); C_tau3_dd_the3 = C_tau3_dd_the3(2);
+% C_tau3_dd_the4 = coeffs(tau3,dd_the4); C_tau3_dd_the4 = C_tau3_dd_the4(2);
+% C_tau3_dd_the5 = coeffs(tau3,dd_the5); C_tau3_dd_the5 = C_tau3_dd_the5(2);
+% 
+% C_tau4_dd_the1 = coeffs(tau4,dd_the1); C_tau4_dd_the1 = C_tau4_dd_the1(2);
+% C_tau4_dd_the2 = coeffs(tau4,dd_the2); C_tau4_dd_the2 = C_tau4_dd_the2(2);
+% C_tau4_dd_the3 = coeffs(tau4,dd_the3); C_tau4_dd_the3 = C_tau4_dd_the3(2);
+% C_tau4_dd_the4 = coeffs(tau4,dd_the4); C_tau4_dd_the4 = C_tau4_dd_the4(2);
+% C_tau4_dd_the5 = 0;
+% 
+% C_tau5_dd_the1 = coeffs(tau5,dd_the1); C_tau5_dd_the1 = C_tau5_dd_the1(2);
+% C_tau5_dd_the2 = coeffs(tau5,dd_the2); C_tau5_dd_the2 = C_tau5_dd_the2(2);
+% C_tau5_dd_the3 = coeffs(tau5,dd_the3); C_tau5_dd_the3 = C_tau5_dd_the3(2);
+% C_tau5_dd_the4 = 0;
+% C_tau5_dd_the5 = coeffs(tau5,dd_the5); C_tau5_dd_the5 = C_tau5_dd_the5(2);
+% 
+% M = [C_tau1_dd_the1, C_tau1_dd_the2, C_tau1_dd_the3, C_tau1_dd_the4, C_tau1_dd_the5; ...
+%     C_tau2_dd_the1, C_tau2_dd_the2, C_tau2_dd_the3, C_tau2_dd_the4, C_tau2_dd_the5; ...
+%     C_tau3_dd_the1, C_tau3_dd_the2, C_tau3_dd_the3, C_tau3_dd_the4, C_tau3_dd_the5; ...
+%     C_tau4_dd_the1, C_tau4_dd_the2, C_tau4_dd_the3, C_tau4_dd_the4, C_tau4_dd_the5; ...
+%     C_tau5_dd_the1, C_tau5_dd_the2, C_tau5_dd_the3, C_tau5_dd_the4, C_tau5_dd_the5];
+% 
+% V_tau1 = coeffs(tau1,[dd_the1,dd_the2,dd_the3,dd_the4,dd_the5]); V_tau1 = V_tau1(end);
+% V_tau2 = coeffs(tau2,[dd_the1,dd_the2,dd_the3,dd_the4,dd_the5]); V_tau2 = V_tau2(end);
+% V_tau3 = coeffs(tau3,[dd_the1,dd_the2,dd_the3,dd_the4,dd_the5]); V_tau3 = V_tau3(end);
+% V_tau4 = coeffs(tau4,[dd_the1,dd_the2,dd_the3,dd_the4,dd_the5]); V_tau4 = V_tau4(end);
+% V_tau5 = coeffs(tau5,[dd_the1,dd_the2,dd_the3,dd_the4,dd_the5]); V_tau5 = V_tau5(end);
+% 
+% V = [V_tau1; V_tau2; V_tau3; V_tau4; V_tau5]
 
-C_tau2_dd_the1 = coeffs(tau2,dd_the1); C_tau2_dd_the1 = C_tau2_dd_the1(2);
-C_tau2_dd_the2 = coeffs(tau2,dd_the2); C_tau2_dd_the2 = C_tau2_dd_the2(2);
-C_tau2_dd_the3 = coeffs(tau2,dd_the3); C_tau2_dd_the3 = C_tau2_dd_the3(2);
-C_tau2_dd_the4 = coeffs(tau2,dd_the4); C_tau2_dd_the4 = C_tau2_dd_the4(2);
-C_tau2_dd_the5 = coeffs(tau2,dd_the5); C_tau2_dd_the5 = C_tau2_dd_the5(2);
-
-C_tau3_dd_the1 = coeffs(tau3,dd_the1); C_tau3_dd_the1 = C_tau3_dd_the1(2);
-C_tau3_dd_the2 = coeffs(tau3,dd_the2); C_tau3_dd_the2 = C_tau3_dd_the2(2);
-C_tau3_dd_the3 = coeffs(tau3,dd_the3); C_tau3_dd_the3 = C_tau3_dd_the3(2);
-C_tau3_dd_the4 = coeffs(tau3,dd_the4); C_tau3_dd_the4 = C_tau3_dd_the4(2);
-C_tau3_dd_the5 = coeffs(tau3,dd_the5); C_tau3_dd_the5 = C_tau3_dd_the5(2);
-
-C_tau4_dd_the1 = coeffs(tau4,dd_the1); C_tau4_dd_the1 = C_tau4_dd_the1(2);
-C_tau4_dd_the2 = coeffs(tau4,dd_the2); C_tau4_dd_the2 = C_tau4_dd_the2(2);
-C_tau4_dd_the3 = coeffs(tau4,dd_the3); C_tau4_dd_the3 = C_tau4_dd_the3(2);
-C_tau4_dd_the4 = coeffs(tau4,dd_the4); C_tau4_dd_the4 = C_tau4_dd_the4(2);
-C_tau4_dd_the5 = 0;
-
-C_tau5_dd_the1 = coeffs(tau5,dd_the1); C_tau5_dd_the1 = C_tau5_dd_the1(2);
-C_tau5_dd_the2 = coeffs(tau5,dd_the2); C_tau5_dd_the2 = C_tau5_dd_the2(2);
-C_tau5_dd_the3 = coeffs(tau5,dd_the3); C_tau5_dd_the3 = C_tau5_dd_the3(2);
-C_tau5_dd_the4 = 0;
-C_tau5_dd_the5 = coeffs(tau5,dd_the5); C_tau5_dd_the5 = C_tau5_dd_the5(2);
-
-M = [C_tau1_dd_the1, C_tau1_dd_the2, C_tau1_dd_the3, C_tau1_dd_the4, C_tau1_dd_the5; ...
-    C_tau2_dd_the1, C_tau2_dd_the2, C_tau2_dd_the3, C_tau2_dd_the4, C_tau2_dd_the5; ...
-    C_tau3_dd_the1, C_tau3_dd_the2, C_tau3_dd_the3, C_tau3_dd_the4, C_tau3_dd_the5; ...
-    C_tau4_dd_the1, C_tau4_dd_the2, C_tau4_dd_the3, C_tau4_dd_the4, C_tau4_dd_the5; ...
-    C_tau5_dd_the1, C_tau5_dd_the2, C_tau5_dd_the3, C_tau5_dd_the4, C_tau5_dd_the5];
-
-V_tau1 = coeffs(tau1,[dd_the1,dd_the2,dd_the3,dd_the4,dd_the5]); V_tau1 = V_tau1(end);
-V_tau2 = coeffs(tau2,[dd_the1,dd_the2,dd_the3,dd_the4,dd_the5]); V_tau2 = V_tau2(end);
-V_tau3 = coeffs(tau3,[dd_the1,dd_the2,dd_the3,dd_the4,dd_the5]); V_tau3 = V_tau3(end);
-V_tau4 = coeffs(tau4,[dd_the1,dd_the2,dd_the3,dd_the4,dd_the5]); V_tau4 = V_tau4(end);
-V_tau5 = coeffs(tau5,[dd_the1,dd_the2,dd_the3,dd_the4,dd_the5]); V_tau5 = V_tau5(end);
-
-V = [V_tau1; V_tau2; V_tau3; V_tau4; V_tau5];
-
+G1 = coeffs(tau1,g)
+G2 = coeffs(tau2,g)

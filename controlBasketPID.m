@@ -41,10 +41,15 @@ for i = 1:n
     tau(tau>tau_max) = tau_max;
     tau(tau<-tau_max) = -tau_max;
     
+    X(:,i)
+    X_dot(:,i)
+    
     % Dynamic Model
     [M,V,G] = basketDynamics(joint_angles, joint_vel, robot);
     X_dot(1:5,i) = X(6:10,i);
     X_dot(6:10,i) = M\(tau - V - G);
+    
+    X_dot(:,i)
     
     % Trapexoidal Integration
     if i > 1
