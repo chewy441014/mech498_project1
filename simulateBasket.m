@@ -122,21 +122,9 @@ end_angles = joint_angles_mat1(:,end);
 %Catching the Ball and Remaining Stationary (Impulse Input)
 
 
-t_im = 2;%time for catching the ball, change if needed
-
 [joint_angles_im, joint_velocities_im] = ...
     controlBasketImpulse(end_angles, robot, tangent, dt);
 
-
-K_p2 = [1000; 1000; 1000; 1000; 1000];
-K_v2 = [200; 200; 200; 200; 200];
-time2 = 0:dt:t_im;
-for j = time2
-    [joint_angles_mat2,~] = controlBasketPID([joint_angles_im(:,end) , joint_velocities_im(:,end)],...
-        [end_angles zeros(5,1)], K_p2, K_v2, time2, robot);
-    
-end
-end_angles = joint_angles_mat2(:,end);
 t_f2=t_f; %time to move back, change if necessary
 %Moving to the Pre-Basket Position
 theta_init = [end_angles zeros(5,1)];

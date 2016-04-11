@@ -6,7 +6,8 @@ function [joint_angles_mat, joint_velocities_mat] = ...
 % robot = robotInit array
 % joint_angles_mat = 5xn matrix of angles at each point
 % joint_velocities_mat = 5xn matrix
-% ball_vel_init is the ball velocity at the point of contact :: scalar
+% ball_vel_init is the ball velocity at the point of contact :: vector 
+
 
 %theta_ref is always theta_init. We want the end effector to never move.
 
@@ -31,7 +32,7 @@ Kv = diag([kv1; kv2; kv3; kv4; kv5]);
 time = 0:dt:5;
 n = length(time);
 F = zeros(3,n);
-F(1,time <= 0.5) = robot.mass.ball/2*ball_vel_init;
+F(:,time <= 0.5) = robot.mass.ball/2*ball_vel_init;
 
 X = zeros(10,n); % initialize variable to hold state vector
 X_dot = zeros(10,n); % initialize variable to hold state vector derivatives
