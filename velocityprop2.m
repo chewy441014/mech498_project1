@@ -2,9 +2,15 @@ the = sym('the',[1 5]);
 d_the = sym('d_the',[1 6]);
 dd_the = sym('dd_the',[1 6]);
 m = sym('m',[1 7]);
-sym g;
+syms g;
 d_the(6) = 0;
 dd_the(6) = 0;
+
+assume(the,'real');
+assume(d_the,'real');
+assume(dd_the,'real');
+assume(m,'real');
+assume(g,'real');
 
 basket = basketInit;
 
@@ -26,7 +32,7 @@ for i = 1:6
     P{i} = basket_T{i}(1:3,4);
     Pc{i} = P{i}/2;
     if (i == 1)
-        w{1} = [0; 0; dd_the(1)];
+        w{1} = [0; 0; d_the(1)];
         wd{1} = [0; 0; dd_the(1)];
         vd{1} = [0; 0; g];
     else
@@ -78,9 +84,17 @@ for i = 1:5
         if(size(C,2) == 1)
             M(i,j) = 0;
         else
-            M(i,j) = C(end);
+            M(i,j) = C(2);
         end
     end
 end
 disp('Simplifying M');
 M = simplify(M);
+
+tau = tau(1:5)';
+tau = expand(tau);
+
+t = M*dd_the(1:5)' + V + g.*G;
+t = expand(t);
+
+t - tau

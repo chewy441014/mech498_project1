@@ -10,7 +10,7 @@ function [joint_angles_mat, joint_velocities_mat] = ...
 % K_p and K_v 5*1 vectors, converted to diagonal matrix in this file 
 
 % Define the max joint torques
-tau_max = 20; % scaler [Nm]
+tau_max = 2000000000; % scaler [Nm]
 
 % Define the control variables
 
@@ -34,22 +34,20 @@ for i = 1:n
     % Contorl torques
     joint_angles = X(1:5,i);
     joint_vel = X(6:10,i);
+    
+    % Dynamic Model
+    [M,V,G] = basketDynamics(joint_angles, joint_vel, robot);
+    
     tau = - Kp*(joint_angles - theta_ref(:,1))...
-            - Kv*(joint_vel - theta_ref(:,2));
+            - Kv*(joint_vel - theta_ref(:,2)) + G;
         
     % Apply joint torque limits
     tau(tau>tau_max) = tau_max;
     tau(tau<-tau_max) = -tau_max;
+%     [joint_angles, theta_ref(:,1), joint_vel, theta_ref(:,2), tau]
     
-    X(:,i)
-    X_dot(:,i)
-    
-    % Dynamic Model
-    [M,V,G] = basketDynamics(joint_angles, joint_vel, robot);
     X_dot(1:5,i) = X(6:10,i);
     X_dot(6:10,i) = M\(tau - V - G);
-    
-    X_dot(:,i)
     
     % Trapexoidal Integration
     if i > 1
