@@ -16,7 +16,7 @@ rho = 2.7*10^3; % kg/m^3
 
 
 robot.home_angles = [0;0;0;0;0];
-
+robot.home_pos = [l_3+l_4; 0; l_1+l_2];
 
 % Fill in FANUC D-H parameters and other necessary parameters 
 robot.parameters.l_1 = l_1;
@@ -60,6 +60,9 @@ robot.colors{6} = [0,1,1];
 
 %Basket goal location
 robot.goal.pos = [0; 1.5; 2];
+robot.goal.predunking = robot.goal.pos + [0; -l_4; l_4];
+%Changing the goal position will require prebasket end effector position to
+%require adjustment, as it is not dynamic as of right now.
 
 %Ball Mass
 robot.ball.mass = 2; %[kg]

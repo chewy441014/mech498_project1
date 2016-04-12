@@ -1,5 +1,5 @@
 function [joint_angles_mat, joint_velocities_mat] = ...
-    controlBasketImpulse(theta_init, robot, ball_vel_init, dt)
+    controlBasketImpulse(theta_init, robot, ball_vel_init, time)
 
 % theta_init = 5x2 matrix, 1st column is angles, 2nd column is velocities
 % time = nx1 or 1xn vector, time vector with each time step
@@ -29,10 +29,10 @@ kv4 = 100;
 kv5 = 100;
 Kv = diag([kv1; kv2; kv3; kv4; kv5]);
 
-time = 0:dt:5;
+dt = time(2) - time(1);
 n = length(time);
 F = zeros(3,n);
-F(:,time <= 0.5) = robot.mass.ball/2*ball_vel_init;
+F(:,time <= 0.5) = robot.ball.mass/2*ball_vel_init*ones(1,length(F(1,time <= 0.5)));
 
 X = zeros(10,n); % initialize variable to hold state vector
 X_dot = zeros(10,n); % initialize variable to hold state vector derivatives
@@ -46,7 +46,7 @@ for i = 1:n
         joint_vel = X(6:10,i-1);
         tau = - Kp*(joint_angles - theta_init(:,1))...
             - Kv*(joint_vel - theta_init(:,2));
-        J = basketJacobian(joint_angles,robot);
+        J = basketJacobian(joint_angles);
 
         % Apply joint torque limits
         tau(tau>tau_max) = tau_max;
@@ -55,7 +55,7 @@ for i = 1:n
         % Dynamic Model
         [M,V,G] = basketDynamics(joint_angles, joint_vel, robot);
         X_dot(1:5,i) = X(6:10,i);
-        X_dot(6:10,i) = M\(tau - V - G - J*F(:,i));
+        X_dot(6:10,i) = M\(tau - V - G - J'*F(:,i));
 
         X(6:10,i) = X(6:10,i-1) + 0.5*(X_dot(6:10,i-1) ...
             + X_dot(6:10,i))*dt;

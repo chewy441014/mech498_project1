@@ -38,12 +38,15 @@ pz_4 = p_4(3);
 
 % Check that the goal point is within a cylinder where the radius, top, and
 % bottom are defined by the maximum arm extension
-if(sqrt(T(1,4)^2 + T(2,4)^2) > 2680 || T(3,4) > 2680 || T(3,4) < -2680)
+if(sqrt(T(1,4)^2 + T(2,4)^2) > xmax || T(3,4) > zmax || T(3,4) < -zmin)
     is_solution = false;
-    error('Target location is not within the workspace');
+    disp('Target location is not within the workspace');
 else
     is_solution = true;
 end
+%These values were 2860, which is in [mm], so I used the workspace
+%definitions from basketInit, since they were unused, and can be changed
+%to our liking.
 
 joint_sols = zeros(5,4);
 % Rows 1-6 correspond to joints 1-6

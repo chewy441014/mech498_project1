@@ -13,10 +13,7 @@ function [joint_angles_mat, joint_velocities_mat] = ...
 tau_max = 2000000000; % scaler [Nm]
 
 % Define the control variables
-
 Kp = diag(K_p);
-
-
 Kv = diag(K_v);
 
 n = length(time);

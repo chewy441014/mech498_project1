@@ -14,12 +14,13 @@ function [is_solution, ball_trajectory] = ballTrajectory(pos_ball, vel_ball, rob
     a = [0; 0; -g];
     t1 = vel_ball(3)/g;
     t_f = t1 + sqrt(2*(pos_ball(3) + vel_ball(3)*t1 - 1/2*g*t1^2)/g);
+    if t_f == 0
+        is_solution = false;
+    end
     t = 0:dt:t_f;
     pos = [pos_ball(1) + vel_ball(1)*t + 1/2*a(1)*t.^2;...
         pos_ball(2) + vel_ball(2)*t + 1/2*a(2)*t.^2;...
         pos_ball(3) + vel_ball(3)*t + 1/2*a(3)*t.^2];
-    ball_trajectory = pos(:,pos(3,:) > 0);
-
     ball_trajectory = pos;
 
 end
