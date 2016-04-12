@@ -13,11 +13,12 @@ assume(m,'real');
 assume(g,'real');
 
 basket = basketInit;
-d1 = basket.parameters.d_1;
-l1 = basket.parameters.l_1;
-l2 = basket.parameters.l_2;
-l3 = basket.parameters.l_3;
-l4 = basket.parameters.l_4;
+d_1 = basket.parameters.d_1;
+l_1 = basket.parameters.l_1;
+l_2 = basket.parameters.l_2;
+l_3 = basket.parameters.l_3;
+l_4 = basket.parameters.l_4;
+rho = basket.const.rho;
 
 joint_angles = [the(1), the(2), the(3), the(4), the(5)];
 [~,basket_T] = basketFK(joint_angles, basket);
@@ -32,16 +33,15 @@ vdc = cell(1,6);
 F = cell(1,6);
 N = cell(1,6);
 I = cell(1,6);
-I_x = @(x) m/12*(3*((d1/2)^2)+x^2);
-I_z = m/2*(d1/2)^2;
+I_x = @(x) (pi/4*d_1^2*x*rho)/12*(3*((d_1/2)^2)+x^2);
+I_z = @(x) (pi/4*d_1^2*x*rho)/2*(d_1/2)^2;
 %If other diameters are not equal to d1 this fucks it up. 
 
-%I{1} = diag([I_x(l1), I_x(l1), I_z]);
 I{1} = diag([0, 0, 0]);
-I{2} = diag([I_z, I_x(l2), I_x(l2)]);
-I{3} = diag([I_x(l3), I_z, I_x(l3)]);
+I{2} = diag([I_z(l_2), I_x(l_2), I_x(l_2)]);
+I{3} = diag([I_x(l_3), I_z(l_3), I_x(l_3)]);
 I{4} = diag([0, 0, 0]);
-I{5} = diag([I_z, I_x(l4), I_x(l4)]);
+I{5} = diag([I_z(l_4), I_x(l_4), I_x(l_4)]);
 I{6} = diag([0, 0, 0]);
 
 for i = 1:6
@@ -115,4 +115,5 @@ tau = expand(tau);
 t = M*dd_the(1:5)' + V + g.*G;
 t = expand(t);
 
-t - tau
+disp('Checking [M,V,G] agreement with tau:');
+arg = simplify(t - tau)

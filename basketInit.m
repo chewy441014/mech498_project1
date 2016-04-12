@@ -13,7 +13,7 @@ d_3 = 0.03; % [m]
 d_4 = 0.03; % [m]
 
 rho = 2.7*10^3; % kg/m^3
-
+robot.const.rho = rho;
 
 robot.home_angles = [0;0;0;0;0];
 robot.home_pos = [l_3+l_4; 0; l_1+l_2];

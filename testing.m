@@ -35,10 +35,18 @@ end
 
 %%
 robot = basketInit();
+
+theta_x = 0;
+R_x = [1 0 0; 0 cos(theta_x) -sin(theta_x); 0 sin(theta_x) cos(theta_x)];
+T = R_x;
+T(1:4,4) = [2; 0.5; 2; 1];
+
+[~, theta_ref] = basketIK(T,zeros(5,1),robot);
+
 t = 0:0.001:15;
 theta_init = [0; 0; 0; 0; pi/2];
 theta_init(:,2) = zeros(5,1);
-theta_ref = [pi/2; 0; 0; 0; pi/2];
+% theta_ref = [pi/2; 0; 0; 0; pi/2];
 theta_ref(:,2) = zeros(5,1);
 Kp = 4*ones(5,1);
 Kv = 10*ones(5,1);
