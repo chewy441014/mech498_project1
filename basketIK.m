@@ -41,6 +41,7 @@ pz_4 = p_4(3);
 if(sqrt(T(1,4)^2 + T(2,4)^2) > xmax || T(3,4) > zmax || T(3,4) < -zmin)
     is_solution = false;
     disp('Target location is not within the workspace');
+    pause(1)
 else
     is_solution = true;
 end
@@ -175,7 +176,8 @@ end
 % If no solution is within the joint limits
 if(best_closeness == 999999999)
     is_solution = false;
-    error('No feasible solution found');
+    disp('No feasible solution found');
+    pause(1)
 end
 
 

@@ -1,15 +1,12 @@
 function simulateBasket(pos_ball, vel_ball)
-dt = 0.01;
+dt = 0.001;
 
 robot = basketInit();
-l_1 = robot.parameters.l_1;
-l_2 = robot.parameters.l_2;
-l_3 = robot.parameters.l_3;
-l_4 = robot.parameters.l_4;
 
 [is,ball_traj] = ballTrajectory(pos_ball, vel_ball, robot, dt);
 if is == false
-    error('Correct the Ball Trajectory')
+    disp('Correct the Ball Trajectory')
+    pause(1);
 end
 home_pos = robot.home_pos;
 home_angles = robot.home_angles;
@@ -40,8 +37,8 @@ T(1:4,4) = [ball_traj(:,intersect_dt); 1];
 
 t_f = intersect_time;
 
-K_p = [100; 100; 100; 100; 100];
-K_v = [100; 100; 100; 100; 100];
+K_p = 4*ones(5,1);
+K_v = 10*ones(5,1);
 
 %Moving to the Ball Intersection Location - PID control
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -71,16 +68,16 @@ end_angles2 = joint_angles_mat2(:,end);
 %Moving to the Pre-Basket Position
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-K_p2=[1000; 1000; 1000; 1000; 1000];
-K_v2=[200; 200; 200; 200; 200];
+K_p2 = 4*ones(5,1);
+K_v2 = 10*ones(5,1);
 
 predunking = robot.goal.predunking; %Gets the position of the end effector in preparation for dunking
 T_prebasket = eye(4); T_prebasket(1:3,4) = predunking; %Assembles transformation matrix using pre-dunking end effector position
 pre_basket_desired_angles = [0; 0; 0; 0; pi/2]; %We want get to the arm to align with the the expected joint angles (joint five must be pi/2)
 [~, pre_dunk_angles] = basketIK(T_prebasket, pre_basket_desired_angles, robot);
-err = 0.001;
-if ~(pre_dunk_angles(5)+err >= pi/2 && pre_dunk_angles(5)-err <= pi/2)
+if ~(round(pre_dunk_angles(5)/(pi/2),1) == 1)
     disp('Dunk will look like shit')
+    pause(1);
 end
 
 time3 = 0:dt:2*t_f; %We are in no rush to get the robot over to the Pre-basket position, we can make this value higher if we want.
@@ -93,26 +90,19 @@ end_angles3 = joint_angles_mat3(:,end);
 %Control Law for Dunking
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+K_p3 = 4*ones(5,1);
+K_v3 = 10*ones(5,1);
+
 dunk_trajectory = createDunkTrajectory(end_angles3,dt,4*t_f);
 theta_init = [end_angles3, zeros(5,1)];
 time4 = 0:dt:4*t_f;
 
-[joint_angles_mat4] = controlDunkPID(theta_init, dunk_trajectory, K_p, K_v, time4, robot);
-% dunk_angles = zeros(5,size(dunk_trajectory,2));
-% for i = 1:size(dunk_trajectory,2)
-%     theta_ref = dunk_trajectory(:,i);
-%     theta_ref_dot = (theta_ref-dunk_trajectory(:,i-1))/dt;
-%     theta_ref = [theta_ref, theta_ref_dot];
-%     [joint_angles4, joint_velocities_mat4] = ...
-%         controlBasketPID(theta_init, theta_ref, K_p, K_v, [0 dt/2], robot);
-%     theta_init = [joint_angles4(:,2) joint_velocities_mat4(:,2)];
-%     dunk_angles(:,i) = joint_angles4(:,2);
-% end
+[joint_angles_mat4] = controlDunkPID(theta_init, dunk_trajectory, K_p3, K_v3, time4, robot);
 
 %Draw the Robot
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-handles = drawBasket( home_angles, robot );
+robot.handles = drawBasket( home_angles, robot );
 for i=1:length(time1)
     setBasket(joint_angles_mat1(:,i), robot)
 end

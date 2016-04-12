@@ -18,7 +18,7 @@ pos_ball = [5 0 0];
 vel_ball = [-2 0 10];
 dt = 0.01;
 [~, ball_trajectory] = ballTrajectory(pos_ball, vel_ball, robot, dt);
-ball_trajectory
+ball_trajectory;
 robot.handles = drawBasket([0 0 0 0 0],robot);
 F(size(ball_trajectory,2)) = struct('cdata',[],'colormap',[]);
 % robotVideo = VideoWriter('robotVideo.avi');
@@ -52,6 +52,6 @@ disp('Done!');
 
 
 %%
-pos_ball = [4 0 0];
+pos_ball = [5 0 0];
 vel_ball = [-2 0 10];
 simulateBasket(pos_ball, vel_ball);

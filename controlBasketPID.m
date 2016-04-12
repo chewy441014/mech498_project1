@@ -41,7 +41,6 @@ for i = 1:n
     % Apply joint torque limits
     tau(tau>tau_max) = tau_max;
     tau(tau<-tau_max) = -tau_max;
-%     [joint_angles, theta_ref(:,1), joint_vel, theta_ref(:,2), tau]
     
     X_dot(1:5,i) = X(6:10,i);
     X_dot(6:10,i) = M\(tau - V - G);

@@ -7,8 +7,10 @@ function [is_solution, ball_trajectory] = ballTrajectory(pos_ball, vel_ball, rob
     if pos_ball(3) < 0
         disp('The ball must start at or above the x-y plane')
         is_solution = false;
+        pause(1)
     elseif pos_ball(3) == 0
         disp('The ball is on the ground.')
+        pause(1)
     end
     g = robot.const.g;
     a = [0; 0; -g];
