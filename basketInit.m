@@ -68,6 +68,6 @@ robot.goal.predunking = robot.goal.pos + [0; -l_4; l_4];
 robot.ball.mass = 2; %[kg]
 
 %Physical Constants
-robot.const.g = 9.81; % m/s^2
+robot.const.g = 9.81; % m/s^2S
 
 end

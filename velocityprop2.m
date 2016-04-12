@@ -13,6 +13,11 @@ assume(m,'real');
 assume(g,'real');
 
 basket = basketInit;
+d1 = basket.parameters.d_1;
+l1 = basket.parameters.l_1;
+l2 = basket.parameters.l_2;
+l3 = basket.parameters.l_3;
+l4 = basket.parameters.l_4;
 
 joint_angles = [the(1), the(2), the(3), the(4), the(5)];
 [~,basket_T] = basketFK(joint_angles, basket);
@@ -26,6 +31,19 @@ vd = cell(1,6);
 vdc = cell(1,6);
 F = cell(1,6);
 N = cell(1,6);
+I = cell(1,6);
+I_x = @(x) m/12*(3*((d1/2)^2)+x^2);
+I_z = m/2*(d1/2)^2;
+%If other diameters are not equal to d1 this fucks it up. 
+
+%I{1} = diag([I_x(l1), I_x(l1), I_z]);
+I{1} = diag([0, 0, 0]);
+I{2} = diag([I_z, I_x(l2), I_x(l2)]);
+I{3} = diag([I_x(l3), I_z, I_x(l3)]);
+I{4} = diag([0, 0, 0]);
+I{5} = diag([I_z, I_x(l4), I_x(l4)]);
+I{6} = diag([0, 0, 0]);
+
 for i = 1:6
     fprintf('Velocity propagation for link %d\n',i);
     R{i} = basket_T{i}(1:3,1:3)';
@@ -42,7 +60,7 @@ for i = 1:6
     end
     vdc{i} = cross(wd{i},Pc{i}) + cross(w{i},cross(w{i},Pc{i})) + vd{i};
     F{i} = m(i)*vdc{i};
-    N{i} = zeros(3,1);
+    N{i} = I{i}*wd{i} + cross(w{i},I{i}*w{i});
 end
 
 f = cell(1,6);
