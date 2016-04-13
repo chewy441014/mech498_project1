@@ -14,12 +14,13 @@ d_the4 = joint_vel(4);
 d_the5 = joint_vel(5);
 
 %Robot parameters
-m1 = robot.parameters.m_1;
-m2 = 0;
-m3 = robot.parameters.m_2;
-m4 = robot.parameters.m_3;
-m5 = 0;
-m6 = robot.parameters.m_4;
+m1 = 0;
+m2 = robot.parameters.m_2;
+m3 = robot.parameters.m_3;
+m4 = 0;
+m5 = robot.parameters.m_4;
+m6 = robot.ball.mass;
+
 
 g = robot.const.g;
 

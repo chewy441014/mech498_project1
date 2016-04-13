@@ -1,5 +1,5 @@
 function simulateBasket(pos_ball, vel_ball)
-dt = 0.001;
+dt = 0.00005;
 
 robot = basketInit();
 
@@ -37,8 +37,8 @@ T(1:4,4) = [ball_traj(:,intersect_dt); 1];
 
 t_f = intersect_time;
 
-K_p = 4*ones(5,1);
-K_v = 10*ones(5,1);
+K_p = 20*ones(5,1);
+K_v = 20*ones(5,1);
 
 %Moving to the Ball Intersection Location - PID control
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -54,6 +54,18 @@ time1 = 0:dt:t_f;
 
 [joint_angles_mat1,~] = controlBasketPID(theta_init, theta_ref,  K_p, K_v, time1, robot);
 end_angles = joint_angles_mat1(:,end);
+
+robot.handles = drawBasket(theta_init,robot);
+for t = 1:125:length(time1)
+    setBasket(joint_angles_mat1(:,t),robot);
+    O = robot.handles(7).Children;
+    set(O, 'XData', ball_traj(1,t));
+    set(O, 'YData', ball_traj(2,t));
+    set(O, 'ZData', ball_traj(3,t));
+end
+disp('Done!');
+
+return
 
 %Catching the Ball and Remaining Stationary (Impulse Input)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,7 +1,7 @@
 the = sym('the',[1 5]);
 d_the = sym('d_the',[1 6]);
 dd_the = sym('dd_the',[1 6]);
-m = sym('m',[1 7]);
+m = sym('m',[1 6]);
 syms g;
 d_the(6) = 0;
 dd_the(6) = 0;
@@ -77,6 +77,11 @@ for i = 6:-1:1
     end
     tau(i) = n{i}(3);
     tau(i) = expand(tau(i));
+end
+
+disp('Simplifying f');
+for i = 1:size(f)
+    f{i} = simplify(f{i});
 end
 
 G = sym('G',[5 1]);

@@ -21,17 +21,17 @@ dt = 0.01;
 ball_trajectory;
 robot.handles = drawBasket([0 0 0 0 0],robot);
 F(size(ball_trajectory,2)) = struct('cdata',[],'colormap',[]);
-% robotVideo = VideoWriter('robotVideo.avi');
-% open(robotVideo);
+robotVideo = VideoWriter('robotVideo.avi');
+open(robotVideo);
 for t = 1:size(ball_trajectory,2)
     setBasket([0 0 0 0 0],robot);
     O = robot.handles(7).Children;
     set(O, 'XData', ball_trajectory(1,t));
     set(O, 'YData', ball_trajectory(2,t));
     set(O, 'ZData', ball_trajectory(3,t));
-%     writeVideo(robotVideo, getframe)
+    writeVideo(robotVideo, getframe)
 end
-% close(robotVideo);
+close(robotVideo);
 
 %%
 robot = basketInit();
@@ -43,23 +43,23 @@ T(1:4,4) = [2; 0.5; 2; 1];
 
 [~, theta_ref] = basketIK(T,zeros(5,1),robot);
 
-t = 0:0.001:15;
-theta_init = [0; 0; 0; 0; pi/2];
+t = 0:0.0001:15;
+theta_init = [0; 0; 0; 0; pi/8];
 theta_init(:,2) = zeros(5,1);
 % theta_ref = [pi/2; 0; 0; 0; pi/2];
 theta_ref(:,2) = zeros(5,1);
-Kp = 4*ones(5,1);
-Kv = 10*ones(5,1);
+Kp = 5*ones(5,1);
+Kv = 15*ones(5,1);
 [joint_pos, joint_vel] = controlBasketPID(theta_init, theta_ref, Kp, Kv, t, robot);
 
 robot.handles = drawBasket(theta_init,robot);
-for t = 1:60:length(t)
+for t = 1:500:length(t)
     setBasket(joint_pos(:,t),robot);
 end
 disp('Done!');
 
 
 %%
-pos_ball = [5 0 0];
-vel_ball = [-2 0 10];
+pos_ball = [5 0.5 0];
+vel_ball = [-1.5 -0.5 11.5];
 simulateBasket(pos_ball, vel_ball);

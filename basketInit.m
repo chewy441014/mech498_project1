@@ -15,7 +15,7 @@ d_4 = 0.03; % [m]
 rho = 2.7*10^3; % kg/m^3
 robot.const.rho = rho;
 
-robot.home_angles = [0;0;0;0;0];
+robot.home_angles = [0;0;0;0;pi/2];
 robot.home_pos = [l_3+l_4; 0; l_1+l_2];
 
 % Fill in FANUC D-H parameters and other necessary parameters 
@@ -65,7 +65,7 @@ robot.goal.predunking = robot.goal.pos + [0; -l_4; l_4];
 %require adjustment, as it is not dynamic as of right now.
 
 %Ball Mass
-robot.ball.mass = 2; %[kg]
+robot.ball.mass = 0; %[kg]
 
 %Physical Constants
 robot.const.g = 9.81; % m/s^2S

@@ -22,6 +22,7 @@ X = zeros(10,n); % initialize variable to hold state vector
 X_dot = zeros(10,n); % initialize variable to hold state vector derivatives
 
 for i = 1:n
+    disp(i/n);
     if i == 1
         X(:,i) = [theta_init(:,1); theta_init(:,2)];
     else
@@ -38,6 +39,7 @@ for i = 1:n
     tau = - Kp*(joint_angles - theta_ref(:,1))...
             - Kv*(joint_vel - theta_ref(:,2)) + G;
         
+%     table(joint_angles,joint_vel,tau) % For debugging
     % Apply joint torque limits
     tau(tau>tau_max) = tau_max;
     tau(tau<-tau_max) = -tau_max;
