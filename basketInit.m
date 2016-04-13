@@ -12,8 +12,13 @@ d_2 = 0.03; % [m]
 d_3 = 0.03; % [m]
 d_4 = 0.03; % [m]
 
+% Physical Parameters for aluminium
 rho = 2.7*10^3; % kg/m^3
+E=68.5*10^9; %N/n2
 robot.const.rho = rho;
+robot.const.E=E;
+robot.const.g = 9.81; % m/s^2S
+
 
 robot.home_angles = [0;0;0;0;pi/2];
 robot.home_pos = [l_3+l_4; 0; l_1+l_2];
@@ -67,7 +72,5 @@ robot.goal.predunking = robot.goal.pos + [0; -l_4; l_4];
 %Ball Mass
 robot.ball.mass = 0; %[kg]
 
-%Physical Constants
-robot.const.g = 9.81; % m/s^2S
 
 end
