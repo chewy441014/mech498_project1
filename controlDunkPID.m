@@ -12,6 +12,7 @@ X = zeros(10,n); % initialize variable to hold state vector
 X_dot = zeros(10,n); % initialize variable to hold state vector derivatives
 
 for i = 1:n
+    fprintf(1,'\b\b\b\b\b\b%01.4f',i/n);
     if i == 1
         X(:,i) = [theta_init(:,1); theta_init(:,2)];
     else
@@ -27,7 +28,7 @@ for i = 1:n
         Theta_dot_ref = (trajectory(:,i) - trajectory(:,i-1))/dt;
 
         % Gravity Compensation Control
-        tau = -K_p.*(joint_angles-Theta_ref)-K_v.*(joint_vel-Theta_dot_ref)+G; % control input (torque)
+        tau = -K_p.*(joint_angles-Theta_ref)-K_v.*(joint_vel-Theta_dot_ref); % control input (torque)
 
         % Apply joint torque limits
         tau(tau>tau_max) = tau_max;

@@ -120,7 +120,7 @@ O = line(0,0,0,'Color',[0,0,0],'Marker','.','MarkerSize',50);
 set(O,'Parent',ball);
 
 % Create Basket
-scale = 0.3;
+scale = 0.15;
 height = 2;
 loc = robot.goal.pos;
 goal = hggroup('Parent',ax);

@@ -30,7 +30,7 @@ X = zeros(10,n); % initialize variable to hold state vector
 X_dot = zeros(10,n); % initialize variable to hold state vector derivatives
 
 for i = 1:n
-    disp(i/n)
+    fprintf(1,'\b\b\b\b\b\b%01.4f',i/n);
     if i == 1
         X(:,i) = [theta_init(:,1); theta_init(:,2)];
     else
