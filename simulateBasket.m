@@ -149,7 +149,7 @@ if x
     fprintf('\n')
     disp('Control Dunk PID')
     disp('      ')
-    pause
+    pause(0.5)
     [joint_angles_mat4] = controlDunkPID(theta_init, dunk_trajectory, K_p3, K_v3, time4, robot);
 
     fprintf('\n')
