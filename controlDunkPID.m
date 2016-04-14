@@ -17,18 +17,22 @@ for i = 1:n
         X(:,i) = [theta_init(:,1); theta_init(:,2)];
     else
         X(:,i) = X(:,i-1);
+        
         % Control torques
         joint_angles = X(1:5,i);
         joint_vel = X(6:10,i);
 
         % Dynamic Model
         [M,V,G] = basketDynamics(joint_angles, joint_vel, robot);
+        if cond(M) > 1e+10
+            disp(M)
+        end
 
         Theta_ref = trajectory(:,i);
         Theta_dot_ref = (trajectory(:,i) - trajectory(:,i-1))/dt;
 
         % Gravity Compensation Control
-        tau = -K_p.*(joint_angles-Theta_ref)-K_v.*(joint_vel-Theta_dot_ref); % control input (torque)
+        tau = -K_p.*(joint_angles-Theta_ref)-K_v.*(joint_vel-Theta_dot_ref) + G; % control input (torque)
 
         % Apply joint torque limits
         tau(tau>tau_max) = tau_max;

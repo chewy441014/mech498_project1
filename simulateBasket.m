@@ -142,7 +142,7 @@ if x
     K_p3 = 4*ones(5,1);
     K_v3 = 10*ones(5,1);
 
-    dunk_trajectory = createDunkTrajectory(end_angles3,dt,50*t_f);
+    dunk_trajectory = createDunkTrajectory(end_angles3,dt,5*t_f);
     theta_init = [end_angles3, zeros(5,1)];
     time4 = 0:dt:4*t_f;
 
