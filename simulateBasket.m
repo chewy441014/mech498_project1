@@ -82,12 +82,7 @@ end
 
 predunking = robot.goal.predunking; %Gets the position of the end effector in preparation for dunking
 T_prebasket = eye(4); T_prebasket(1:3,4) = predunking; %Assembles transformation matrix using pre-dunking end effector position
-pre_basket_desired_angles = [0; 0; 0; 0; pi/2]; %We want get to the arm to align with the the expected joint angles (joint five must be pi/2)
-[~, pre_dunk_angles] = basketIK(T_prebasket, pre_basket_desired_angles, robot);
-if ~(round(pre_dunk_angles(5)/(pi/2),1) == 1)
-    disp('Dunk will look like shit')
-    pause(1);
-end
+[~, pre_dunk_angles] = basketIK(T_prebasket, zeros(5,1), robot);
 
 time3 = 0:dt:2*t_f; %We are in no rush to get the robot over to the Pre-basket position, we can make this value higher if we want.
 theta_init = [end_angles2, zeros(5,1)];
