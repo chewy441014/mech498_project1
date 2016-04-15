@@ -1,4 +1,4 @@
-function [ball_trajectory] = post_dunk_Trajectory(init_vel, init_pos, dt, robot)
+function [ball_trajectory, timevector] = post_dunk_Trajectory(init_vel, init_pos, dt, robot)
 %init_vel is a 3x1 velocity vector
 %init_pos is a 3x1 velocity vector
 %they are the velocity and position at which the ball is dunked
@@ -32,11 +32,6 @@ pos{1} = [vx*timecell{1}; vy*timecell{1}; ...
     init_pos(3) + vz*timecell{1} - 0.5*g*timecell{1}.^2];
 
 for i = 1:num_bounce - 1
-    if i==3
-        a=round(t_set(i)/dt)*dt
-        b=round(t_set(i+1)/dt)*dt;
-
-    end
     timepoint1 = round(t_set(i)/dt)*dt;
     timepoint2 = round(t_set(i+1)/dt)*dt;
     timecell{i+1} = timepoint1:dt:timepoint2;
@@ -45,12 +40,13 @@ for i = 1:num_bounce - 1
     pos{i+1} = [vx*timecell{i+1}; vy*timecell{i+1}; v_init*time - 0.5*g*time.^2];
     
 end
+timevector = cat(2,timecell);
 ball_trajectory = cat(2, pos{:});
-for i = 1:size(ball_trajectory, 2)
-    O = robot.handles(7).Children;
-    set(O, 'XData', ball_trajectory(1,i));
-    set(O, 'YData', ball_trajectory(2,i));
-    set(O, 'ZData', ball_trajectory(3,i));
-    pause(0.001)
-end
+% for i = 1:size(ball_trajectory, 2)
+%     O = robot.handles(7).Children;
+%     set(O, 'XData', ball_trajectory(1,i));
+%     set(O, 'YData', ball_trajectory(2,i));
+%     set(O, 'ZData', ball_trajectory(3,i));
+%     pause(0.001)
+% end
 end
