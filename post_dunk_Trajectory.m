@@ -28,7 +28,7 @@ totaltime = sum(t_set);
 timecell = cell(1, num_bounce);
 timecell{1} = 0:dt:round(t0/dt)*dt;
 pos = cell(1,num_bounce);
-pos{1} = [vx*timecell{1}; vy*timecell{1}; ...
+pos{1} = [init_pos(1) + vx*timecell{1}; init_pos(2) + vy*timecell{1}; ...
     init_pos(3) + vz*timecell{1} - 0.5*g*timecell{1}.^2];
 
 for i = 1:num_bounce - 1
@@ -37,16 +37,18 @@ for i = 1:num_bounce - 1
     timecell{i+1} = timepoint1:dt:timepoint2;
     v_init = sqrt(2*g*h_set(i+1));
     time = timecell{i+1} - timecell{i}(end);
-    pos{i+1} = [vx*timecell{i+1}; vy*timecell{i+1}; v_init*time - 0.5*g*time.^2];
+    pos{i+1} = [init_pos(1) + vx*timecell{i+1}; init_pos(2) + vy*timecell{i+1}; v_init*time - 0.5*g*time.^2];
     
 end
-timevector = cat(2,timecell);
+
+timevector = cat(2,timecell{:});
 ball_trajectory = cat(2, pos{:});
+% robot.handles = drawBasket(robot.home_angles, init_pos, robot)
 % for i = 1:size(ball_trajectory, 2)
 %     O = robot.handles(7).Children;
 %     set(O, 'XData', ball_trajectory(1,i));
 %     set(O, 'YData', ball_trajectory(2,i));
 %     set(O, 'ZData', ball_trajectory(3,i));
-%     pause(0.001)
+%     pause(0.01)
 % end
 end

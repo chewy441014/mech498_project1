@@ -42,8 +42,9 @@ t_f = intersect_time;
 %Moving to the Ball Intersection Location - PID control
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%Calculating the intersection point joint angles 
-[~, joint_angles] = basketIK(T, home_angles, robot);
+%Calculating the intersection point joint angles
+[reachable, joint_angles] = basketIK(T, home_angles, robot);
+
 
 theta_init = [home_angles, zeros(5,1)]; %5*2 matrix, first column start joint angles
 theta_ref = [joint_angles, zeros(5,1)]; %5*2 matrix, first column intersection point
@@ -66,7 +67,7 @@ skip_frames1 = round(length(time1)/number_of_frames1);
 %Catching the Ball and Remaining Stationary (Impulse Input)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-time2 = 0:dt:5; %I have hard coded impulse to use five seconds. We'll see how that turns out. 
+time2 = 0:dt:5; %I have hard coded impulse to use five seconds. We'll see how that turns out.
 theta_init2 = [end_angles, zeros(5,1)];
 robot.ball.mass = 5;
 
@@ -139,19 +140,19 @@ prompt = 'Run the dunking code? (Type int only, 1 = true, 0 = false) ';
 x = input(prompt);
 
 if x
-    K_p3 = 4*ones(5,1);
+    K_p3 = 6*ones(5,1);
     K_v3 = 10*ones(5,1);
-
+    
     dunk_trajectory = createDunkTrajectory(end_angles3,dt,5*t_f);
     theta_init = [end_angles3, zeros(5,1)];
     time4 = 0:dt:4*t_f;
-
+    
     fprintf('\n')
     disp('Control Dunk PID')
     disp('      ')
     pause(0.5)
     [joint_angles_mat4] = controlDunkPID(theta_init, dunk_trajectory, K_p3, K_v3, time4, robot);
-
+    
     fprintf('\n')
     disp('Calculating new Ball Pos ')
     disp('      ')
@@ -159,7 +160,7 @@ if x
     
     number_of_frames4 = time4(end)*frames_per_second;
     skip_frames4 = round(length(time4)/number_of_frames4);
-
+    
     n = length(time4);
     ball_pos3 = zeros(3,n);
     for i = 1:skip_frames4:length(time4)
@@ -168,6 +169,14 @@ if x
         ball_pos3(:,i) = T(1:3,4) + [0; 0; robot.parameters.l_1];
     end
 end
+norm_vec = arrayfun(@(idx) norm(ball_pos3(:,idx)), 1:size(ball_pos3,2));
+[~, col, ~] = find(norm_vec); %find only the nonzero terms
+ball_pos3_extract = ball_pos3(:, col);
+%post-dunk motion of the ball
+dunk_ball_vel = (ball_pos3_extract(:, end) - ball_pos3_extract(:, end - 1))/(skip_frames4*dt);
+dunk_ball_pos = ball_pos3_extract(:, end);
+[bounce_trajectory, time5] = post_dunk_Trajectory(dunk_ball_vel, dunk_ball_pos, dt, robot);
+
 
 %Draw the Robot
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -177,7 +186,8 @@ prompt = 'Draw the robot? (Type int only, 1 = true, 0 = false) ';
 x2 = input(prompt);
 
 if x2
-    robot.handles = drawBasket(theta_init,robot);
+    robot.handles = drawBasket(theta_init, pos_ball, robot);
+    
     for t = 1:skip_frames1:length(time1)
         setBasket(joint_angles_mat1(:,t),robot);
         O = robot.handles(7).Children;
@@ -207,8 +217,17 @@ if x2
             set(O, 'YData', ball_pos3(2,t));
             set(O, 'ZData', ball_pos3(3,t));
         end
+        for t = 1:skip_frames4:length(time5)
+            setBasket(joint_angles_mat4(:,end),robot);
+            O = robot.handles(7).Children;
+            set(O, 'XData', bounce_trajectory(1,t));
+            set(O, 'YData', bounce_trajectory(2,t));
+            set(O, 'ZData', bounce_trajectory(3,t));
+        end
     end
     disp('Done!');
+    
 end
+
 
 end

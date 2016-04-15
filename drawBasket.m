@@ -1,4 +1,4 @@
-function [ handles ] = drawBasket( joint_angles, robot )
+function [ handles ] = drawBasket( joint_angles, pos_ball, robot )
 % MECH 498/598 - Intro to Robotics - Spring 2016
 %
 %    DESCRIPTION - Plot a graphical representation of the robot 
@@ -116,7 +116,7 @@ set(hg,'Parent',T_6);
 
 % Create Ball
 ball = hggroup('Parent',ax);
-O = line(0,0,0,'Color',[0,0,0],'Marker','.','MarkerSize',50);
+O = line(pos_ball(1), pos_ball(2), pos_ball(3),'Color',[0,0,0],'Marker','.','MarkerSize',50);
 set(O,'Parent',ball);
 
 % Create Basket
