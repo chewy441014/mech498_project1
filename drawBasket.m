@@ -156,7 +156,7 @@ T_goal = makehgtform('translate',loc);
 T = hgtransform('Parent',ax,'Matrix',T_goal);
 set(goal,'Parent',T);
 
-t = text(1, 1, 0,strcat('Current Time    ', num2str(timenow)), 'fontSize', 30);
+t = text(1, 1, 0,'Current Time    0', 'fontSize', 30);
 
 % Render graphics
 set(gcf,'Renderer','openGL');
