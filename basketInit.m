@@ -18,7 +18,7 @@ d_4 = 0.03; % [m]
 rho = 2.7*10^3; % kg/m^3
 E=68.5*10^9; %N/m2
 Sut=310*10^9; %N/m2
-Sy=276*10^9; %n/m2
+Sy=276*10^9; %N/m2
 
 robot.const.rho = rho;
 robot.const.E=E;

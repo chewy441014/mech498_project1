@@ -21,6 +21,11 @@ l_2 = robot.parameters.l_2;
 l_3 = robot.parameters.l_3;
 l_4 = robot.parameters.l_4;
 
+d1 = robot.parameters.d_1;
+d2 = robot.parameters.d_2;
+d3 = robot.parameters.d_3;
+d4 = robot.parameters.d_4;
+
 % Plot scaling properties
 origin_size = 20;
 marker_size = 10;
@@ -49,7 +54,7 @@ set(h,'Parent',hg);
 circ = linspace(0,2*pi,50);
 L_0 = line(0.1*cos(circ),0.1*sin(circ),...
     -l_1*ones(length(circ)),...
-    'Color','k','LineWidth',1.5);
+    'Color','k','LineWidth',4);
 set(L_0,'Parent',hg);
 T_0 = hgtransform('Parent',ax,'Matrix',makehgtform('translate',[0,0,l_1]));
 set(hg,'Parent',T_0);
@@ -59,7 +64,7 @@ h = drawRobotFrame(robot.colors{1});
 hg = hggroup('Parent',ax);
 set(h,'Parent',hg);
 L_1 = line([0,0],[0,0],[-l_1,0],...
-    'Color',robot.colors{1},'LineWidth',1.5);
+    'Color',robot.colors{1},'LineWidth',d1*100);
 set(L_1,'Parent',hg);
 T_1 = hgtransform('Parent',T_0,'Matrix',robot_T{1});
 set(hg,'Parent',T_1);
@@ -69,7 +74,7 @@ h = drawRobotFrame(robot.colors{2});
 hg = hggroup('Parent',ax);
 set(h,'Parent',hg);
 L_2 = line([0,l_2],[0,0],[0,0],...
-    'Color',robot.colors{2},'LineWidth',1.5);
+    'Color',robot.colors{2},'LineWidth',d2*100);
 set(L_2,'Parent',hg);
 T_2 = hgtransform('Parent',T_1,'Matrix',robot_T{2});
 set(hg,'Parent',T_2);
@@ -79,7 +84,7 @@ h = drawRobotFrame(robot.colors{3});
 hg = hggroup('Parent',ax);
 set(h,'Parent',hg);
 L_3 = line([0,0],[-l_3,0],[0,0],...
-    'Color',robot.colors{3},'LineWidth',1.5);
+    'Color',robot.colors{3},'LineWidth',d3*100);
 set(L_3,'Parent',hg);
 T_3 = hgtransform('Parent',T_2,'Matrix',robot_T{3});
 set(hg,'Parent',T_3);
@@ -89,7 +94,7 @@ h = drawRobotFrame(robot.colors{4});
 hg = hggroup('Parent',ax);
 set(h,'Parent',hg);
 L_4 = line([0,0,0],[0,0,0],[0,0,0],...
-    'Color',robot.colors{4},'LineWidth',1.5);
+    'Color',robot.colors{4},'LineWidth',d4*100);
 set(L_4,'Parent',hg);
 T_4 = hgtransform('Parent',T_3,'Matrix',robot_T{4});
 set(hg,'Parent',T_4);
@@ -99,7 +104,7 @@ h = drawRobotFrame(robot.colors{5});
 hg = hggroup('Parent',ax);
 set(h,'Parent',hg);
 L_5 = line([0,0],[-l_4,0],[0,0],...
-    'Color',robot.colors{5},'LineWidth',1.5);
+    'Color',robot.colors{5},'LineWidth',d4*100);
 set(L_5,'Parent',hg);
 T_5 = hgtransform('Parent',T_4,'Matrix',robot_T{5});
 set(hg,'Parent',T_5);
