@@ -60,6 +60,7 @@ disp('Done!');
 
 
 %%
+clc
 pos_ball = [5 0.5 0];
 vel_ball = [-1.5 -0.5 11.5];
 simulateBasket(pos_ball, vel_ball);

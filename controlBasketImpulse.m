@@ -24,11 +24,12 @@ Kv = diag(Kv);
 dt = time(2) - time(1);
 n = length(time);
 F = zeros(3,n);
-F(:,time <= 0.1) = robot.ball.mass/dt*ball_vel_init*ones(1,length(F(1,time <= 0.1)));
+F(:,time <= 0.05) = robot.ball.mass/dt*ball_vel_init*ones(1,length(F(1,time <= 0.05)));
 
 X = zeros(10,n); % initialize variable to hold state vector
 X_dot = zeros(10,n); % initialize variable to hold state vector derivatives
 
+fprintf(1,'%01.4f',0);
 for i = 1:n
     fprintf(1,'\b\b\b\b\b\b%01.4f',i/n);
     if i == 1
@@ -62,7 +63,12 @@ for i = 1:n
             X_dot(1:5,i))*dt;
     end
  
+    if(abs(X(:,i) - [theta_init(:,1); theta_init(:,1)]) < 0.001)
+        
+    end
+    
 end
+fprintf('\b\b\b\b\b\bDone!\n');
 %Theta Generated for each time step
 joint_angles_mat = X(1:5,:);
 joint_velocities_mat = X(6:10,:);
