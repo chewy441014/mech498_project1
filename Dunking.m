@@ -28,7 +28,7 @@ t_f = (theta_ref2(end) - theta_ref1(end))/(theta_dot_ref(end));
 time2 = 0:dt:t_f;
 K_p = 150*ones(1, 5);
 K_v = 20*ones(1, 5);
-init_angles = [joint_angles_mat1(:, end) zeros(5,1)];
+init_angles = [[pi/2; 0.35; -0.8; 0; pi/2] zeros(5,1)];
 disp('      ')
 disp('Calculating dunking trajectory')
 disp('        ')
