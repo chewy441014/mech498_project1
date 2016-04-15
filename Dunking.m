@@ -1,11 +1,5 @@
 function [Dunking_trajectory] = Dunking(init_angles, dt)
 robot = basketInit;
-% %%%
-% robot.handles = drawBasket([pi/2; 0.35; -0.8; 0; pi/2], [0,0,0], robot);
-% setBasket([pi/2; 0.35; -0.8; 0; pi/2], robot);
-% pause
-% setBasket([pi/2; 0.35; -0.8; 0; 0], robot);
-% %%%
 theta_ref1 = [pi/2; 0.35; -0.8; 0; pi/2];
 theta_ref1 = [theta_ref1 zeros(5,1)];
 [T, ~] = basketFK(init_angles, robot);
@@ -27,13 +21,6 @@ disp('        ')
 robot.handles = drawBasket(robot.home_angles, [0,0,0], robot);
 
 %throwing the ball
-% %%%
-% joint_angles_mat1 = [pi/2; 0.35; -0.8; 0; pi/2];
-% theta_ref1 = [pi/2; 0.35; -0.8; 0; pi/2];
-% theta_ref1 = [theta_ref1 zeros(5,1)];
-% time1 = [];
-% joint_angles_mat1 = [pi/2; 0.35; -0.8; 0; pi/2];
-% %%%
 theta_ref2 = [pi/2; 0.15; -0.6; 0; 0];
 theta_dot_ref = [0; 0; 0; 0; -3];
 theta_ref2 = [theta_ref2 theta_dot_ref];
