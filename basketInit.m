@@ -13,10 +13,17 @@ d_3 = 0.03; % [m]
 d_4 = 0.03; % [m]
 
 % Physical Parameters for aluminium
+%http://asm.matweb.com/search/SpecificMaterial.asp?bassnum=MA6061t6
+
 rho = 2.7*10^3; % kg/m^3
-E=68.5*10^9; %N/n2
+E=68.5*10^9; %N/m2
+Sut=310*10^9; %N/m2
+Sy=276*10^9; %n/m2
+
 robot.const.rho = rho;
 robot.const.E=E;
+robot.const.Sut=Sut;
+robot.const.Sy=Sy;
 robot.const.g = 9.81; % m/s^2S
 
 
