@@ -12,7 +12,7 @@ t_f = distance/avg_vel;
 time1 = 0:dt:t_f;
 
 K_p = 100*ones(1, 5);
-K_v = 10*ones(1, 5);
+K_v = 20*ones(1, 5);
 
 init_angles = [init_angles zeros(5,1)];
 disp('Calculating trajectory to pre-dunking position')

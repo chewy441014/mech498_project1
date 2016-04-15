@@ -156,6 +156,8 @@ T_goal = makehgtform('translate',loc);
 T = hgtransform('Parent',ax,'Matrix',T_goal);
 set(goal,'Parent',T);
 
+t = text(1, 1, 0,strcat('Current Time    ', num2str(timenow)), 'fontSize', 30);
+
 % Render graphics
 set(gcf,'Renderer','openGL');
 drawnow;
@@ -164,7 +166,7 @@ drawnow;
 
 
 % Return hgtransform handles
-handles = [T_1,T_2,T_3,T_4,T_5,T_6,ball];
+handles = [T_1,T_2,T_3,T_4,T_5,T_6,ball,t];
 
     function h = drawRobotFrame( color )
          

@@ -61,6 +61,65 @@ disp('Done!');
 
 %%
 clc
-pos_ball = [5 0.5 0];
-vel_ball = [-1.5 -0.5 11.5];
+pos_ball = [5 -5 0];
+vel_ball = [-2.5 3 12];
 simulateBasket(pos_ball, vel_ball);
+
+%%
+clc
+pos_ball = [5 0 0];
+vel_ball = [-1.5 0 12];
+simulateBasket(pos_ball, vel_ball);
+
+%%
+clc
+pos_ball = [5 -5 0];
+vel_ball = [-2.5 3 12];
+
+
+dt = 0.00009; % Time step
+robot = basketInit();
+home_pos = robot.home_pos;
+home_angles = robot.home_angles;
+[is_solution,ball_traj] = ballTrajectory(pos_ball, vel_ball, robot, dt);
+if is_solution == false
+    error('Invalid ball trajectory')
+end
+smallest_dist = 99999999;
+intersect_dt = 0;
+intersect_time = 0;
+% Look at every point of ball trajectory and find the closest one to the
+% robot home position
+for i = 1:size(ball_traj,2)
+    dist = norm(home_pos - ball_traj(:,i));
+    if(dist < smallest_dist)
+        smallest_dist = dist;
+        intersect_dt = i;
+        intersect_time = i*dt;
+    end
+end
+t_f = intersect_time;
+% Find the orientation of the ball when the robot intercepts it
+tangent = ball_traj(:,intersect_dt-1) - ball_traj(:,intersect_dt);
+theta_y = atan2(tangent(1),tangent(3));
+theta_z = atan2(tangent(2),tangent(1));
+Ry = [cos(theta_y) 0 sin(theta_y);
+    0 1 0;
+    -sin(theta_y) 0 cos(theta_y)];
+Rz = [cos(theta_z) -sin(theta_z) 0;
+    sin(theta_z) cos(theta_z) 0;
+    0 0 1];
+R = Rz*Ry;
+T = R;
+T(1:4,4) = [ball_traj(:,intersect_dt); 1];
+
+% Calculate desired joint angles based on ball interception point and
+% orientation
+[isReachable, joint_angles] = basketIK(T, home_angles, robot);
+if ~isReachable
+    warning('Intercept point may not be within the workspace')
+end
+
+drawBasket(joint_angles,[0; 0; 0],robot);
+hold on;
+scatter3(ball_traj(1,:),ball_traj(2,:),ball_traj(3,:),1)

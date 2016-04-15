@@ -32,9 +32,9 @@ for i = 1:size(ball_traj,2)
 end
 t_f = intersect_time;
 % Find the orientation of the ball when the robot intercepts it
-tangent = abs(ball_traj(:,intersect_dt) - ball_traj(:,intersect_dt-1));
-theta_y = tan(tangent(1)/tangent(3));
-theta_z = tan(tangent(2)/tangent(1));
+tangent = ball_traj(:,intersect_dt-1) - ball_traj(:,intersect_dt);
+theta_y = atan2(tangent(1),tangent(3));
+theta_z = atan2(tangent(2),tangent(1));
 Ry = [cos(theta_y) 0 sin(theta_y);
     0 1 0;
     -sin(theta_y) 0 cos(theta_y)];
@@ -66,34 +66,36 @@ time1 = 0:dt:t_f;
 % ball yet
 robot.ball.mass = 0;
 
-K_p = 100*ones(5,1);
-K_v = 20*ones(5,1);
+K_p = [200 200 200 200 400];
+K_v = [40 40 50 10 20];
 [joint_angles_mat1,~] = controlBasketPID(theta_init, theta_ref,  K_p, K_v, time1, robot);
 end_angles = joint_angles_mat1(:,end);
 
 % Animation output settings
-number_of_frames1 = time1(end)*frames_per_second;
-skip_frames1 = round(length(time1)/number_of_frames1);
+% number_of_frames1 = time1(end)*frames_per_second;
+% skip_frames1 = round(length(time1)/number_of_frames1);
+skip_frames1 = round(0.0167/dt);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Catching the ball and remaining stationary (Impulse Input)
 disp('Catching the ball and remaining stationary');
 
 % Final time is 5 seconds. Modify if necessary.
-time2 = 0:dt:5;
+time2 = 0:dt:2.5;
 theta_init2 = [end_angles, zeros(5,1)];
 
 % Set the mass of the ball to 5kg because the robot is now holding the ball
 robot.ball.mass = 5;
 
-Kp = 100*ones(5,1);
+Kp = 150*ones(5,1);
 Kv = 25*ones(5,1);
 [joint_angles_mat2, ~] = controlBasketImpulse(theta_init2, Kp, Kv, robot, tangent, time2);
 end_angles2 = joint_angles_mat2(:,end);
 
 % Animation settings
-number_of_frames2 = time2(end)*frames_per_second;
-skip_frames2 = round(length(time2)/number_of_frames2);
+% number_of_frames2 = time2(end)*frames_per_second;
+% skip_frames2 = round(length(time2)/number_of_frames2);
+skip_frames2 = round(0.0167/dt);
 
 % Find the position of the ball from the simulation
 disp('Calculating position of ball during impulse simulation');
@@ -146,8 +148,9 @@ end
 [joint_angles_mat3, time3] = Dunking(end_angles2, dt);
 
 % Animation settings
-number_of_frames3 = time3(end)*frames_per_second;
-skip_frames3 = round(length(time3)/number_of_frames3);
+% number_of_frames3 = time3(end)*frames_per_second;
+% skip_frames3 = round(length(time3)/number_of_frames3);
+skip_frames3 = round(0.0167/dt);
 
 disp('Calculating position of ball during dunking simulation')
 n = length(time3);
@@ -167,8 +170,9 @@ dunk_ball_pos = ball_pos3_extract(:, end);
 [bounce_trajectory, time4] = post_dunk_Trajectory(dunk_ball_vel, dunk_ball_pos, dt, robot);
 
 % Animation settings
-number_of_frames4 = time4(end)*frames_per_second;
-skip_frames4 = round(length(time4)/number_of_frames4);
+% number_of_frames4 = time4(end)*frames_per_second;
+% skip_frames4 = round(length(time4)/number_of_frames4);
+skip_frames4 = round(0.0167/dt);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Draw the robot
@@ -181,28 +185,28 @@ while draw
     robot.handles = drawBasket(theta_init, pos_ball, robot);
     
     for t = 1:skip_frames1:length(time1)
-        setBasket(joint_angles_mat1(:,t),robot);
+        setBasket(joint_angles_mat1(:,t), t*dt, robot);
         O = robot.handles(7).Children;
         set(O, 'XData', ball_traj(1,t));
         set(O, 'YData', ball_traj(2,t));
         set(O, 'ZData', ball_traj(3,t));
     end
     for t = 1:skip_frames2:length(time2)
-        setBasket(joint_angles_mat2(:,t),robot);
+        setBasket(joint_angles_mat2(:,t), t*dt, robot);
         O = robot.handles(7).Children;
         set(O, 'XData', ball_pos(1,t));
         set(O, 'YData', ball_pos(2,t));
         set(O, 'ZData', ball_pos(3,t));
     end
     for t = 1:skip_frames3:length(time3)
-        setBasket(joint_angles_mat3(:,t),robot);
+        setBasket(joint_angles_mat3(:,t), t*dt, robot);
         O = robot.handles(7).Children;
         set(O, 'XData', ball_pos2(1,t));
         set(O, 'YData', ball_pos2(2,t));
         set(O, 'ZData', ball_pos2(3,t));
     end
     for t = 1:skip_frames4:length(time4)
-        setBasket(joint_angles_mat3(:,end),robot);
+        setBasket(joint_angles_mat3(:,end), t*dt, robot);
         O = robot.handles(7).Children;
         set(O, 'XData', bounce_trajectory(1,t));
         set(O, 'YData', bounce_trajectory(2,t));
