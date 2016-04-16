@@ -1,4 +1,4 @@
-function setBasket(joint_angles, timenow, robot)
+function setBasket(joint_angles, timenow, state, robot)
 % SETBASKET Update the position of the robot after calling drawBasket
 
 [~,robot_T] = basketFK(joint_angles,robot);
@@ -8,7 +8,8 @@ set(robot.handles(3),'Matrix',robot_T{3});
 set(robot.handles(4),'Matrix',robot_T{4});
 set(robot.handles(5),'Matrix',robot_T{5});
 set(robot.handles(6),'Matrix',robot_T{6});
-robot.handles(8).String = timenow;
+robot.handles(8).String = strcat( 'Current Time:', '  ', num2str(timenow), 'seconds');
+robot.handles(9).String = strcat(state);
 drawnow;
 
 end

@@ -180,39 +180,60 @@ skip_frames4 = round(0.0167/dt);
 fprintf('\n')
 prompt = 'Draw the robot? (Type int only, 1 = true, 0 = false) ';
 draw = input(prompt);
-
+frame_time = 0.1;
 while draw
     robot.handles = drawBasket(theta_init, pos_ball, robot);
     
     for t = 1:skip_frames1:length(time1)
-        setBasket(joint_angles_mat1(:,t), t*dt, robot);
+        tic;
+        setBasket(joint_angles_mat1(:,t), t*dt, 'Catching Ball', robot);
         O = robot.handles(7).Children;
         set(O, 'XData', ball_traj(1,t));
         set(O, 'YData', ball_traj(2,t));
         set(O, 'ZData', ball_traj(3,t));
+        val = toc;
+        pause(frame_time - val)
     end
+    passed_time = length(time1)*dt;
     for t = 1:skip_frames2:length(time2)
-        setBasket(joint_angles_mat2(:,t), t*dt, robot);
+        tic;
+        setBasket(joint_angles_mat2(:,t), passed_time + t*dt, 'Impulse Control', robot);
         O = robot.handles(7).Children;
         set(O, 'XData', ball_pos(1,t));
         set(O, 'YData', ball_pos(2,t));
         set(O, 'ZData', ball_pos(3,t));
+        val = toc;
+        pause(frame_time - val)
     end
+    passed_time = passed_time + length(time2)*dt;
     for t = 1:skip_frames3:length(time3)
-        setBasket(joint_angles_mat3(:,t), t*dt, robot);
+        tic;
+        setBasket(joint_angles_mat3(:,t), passed_time + t*dt, 'Dunking', robot);
         O = robot.handles(7).Children;
         set(O, 'XData', ball_pos2(1,t));
         set(O, 'YData', ball_pos2(2,t));
         set(O, 'ZData', ball_pos2(3,t));
+        val = toc;
+        pause(frame_time - val)
     end
-    for t = 1:skip_frames4:length(time4)
-        setBasket(joint_angles_mat3(:,end), t*dt, robot);
+    passed_time = passed_time + length(time3)*dt;
+    for t = 1:skip_frames4:length(time4)-1
+        tic;
+        setBasket(joint_angles_mat3(:,end), passed_time + t*dt, 'Ball Bouncing', robot);
         O = robot.handles(7).Children;
         set(O, 'XData', bounce_trajectory(1,t));
         set(O, 'YData', bounce_trajectory(2,t));
         set(O, 'ZData', bounce_trajectory(3,t));
+        val = toc;
+        pause(frame_time - val)
     end
-    
+    passed_time = passed_time + length(time4)*dt;
+    setBasket(joint_angles_mat3(:,end), passed_time, 'Task Completed', robot);
+        O = robot.handles(7).Children;
+        set(O, 'XData', bounce_trajectory(1,end));
+        set(O, 'YData', bounce_trajectory(2,end));
+        set(O, 'ZData', bounce_trajectory(3,end));
+
     prompt = 'Draw the robot again? (Type int only, 1 = true, 0 = false) ';
     draw = input(prompt);
 end
