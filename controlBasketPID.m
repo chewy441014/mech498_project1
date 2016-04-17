@@ -10,7 +10,7 @@ function [joint_angles_mat, joint_velocities_mat] = ...
 % K_p and K_v 5*1 vectors, converted to diagonal matrix in this file 
 
 % Define the max joint torques
-tau_max = 2000000000; % scaler [Nm]
+tau_max = 150; % scaler [Nm]
 
 % Define the control variables
 Kp = diag(K_p);
@@ -20,6 +20,8 @@ n = length(time);
 dt = time(2) - time(1);
 X = zeros(10,n); % initialize variable to hold state vector
 X_dot = zeros(10,n); % initialize variable to hold state vector derivatives
+
+max_t = 0;
 
 fprintf(1,'%01.4f',0);
 for i = 1:n
@@ -40,6 +42,10 @@ for i = 1:n
     tau = - Kp*(joint_angles - theta_ref(:,1))...
             - Kv*(joint_vel - theta_ref(:,2)) + G;
         
+    if(max(tau) > max_t)
+        max_t = max(tau);
+    end
+        
 %     table(joint_angles,joint_vel,tau) % For debugging
     % Apply joint torque limits
     tau(tau>tau_max) = tau_max;
@@ -58,6 +64,7 @@ for i = 1:n
     
 end
 fprintf('\b\b\b\b\b\bDone!\n');
+disp(max_t);
 %Theta Generated for each time step
 joint_angles_mat = X(1:5,:);
 joint_velocities_mat = X(6:10,:);

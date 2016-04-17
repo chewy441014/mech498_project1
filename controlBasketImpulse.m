@@ -14,7 +14,7 @@ function [joint_angles_mat, joint_velocities_mat] = ...
 %theta_ref is always theta_init. We want the end effector to never move.
 
 % Define the max joint torques
-tau_max = 10000; % scaler [Nm]
+tau_max = 150; % scaler [Nm]
 
 % Define the control variables
 Kp = diag(Kp);
@@ -24,10 +24,12 @@ Kv = diag(Kv);
 dt = time(2) - time(1);
 n = length(time);
 F = zeros(3,n);
-F(:,time <= 0.05) = robot.ball.mass/dt*ball_vel_init*ones(1,length(F(1,time <= 0.05)));
+F(:,time <= 0.03) = robot.ball.mass/dt*ball_vel_init*ones(1,length(F(1,time <= 0.03)));
 
 X = zeros(10,n); % initialize variable to hold state vector
 X_dot = zeros(10,n); % initialize variable to hold state vector derivatives
+
+% max_t = 0;
 
 fprintf(1,'%01.4f',0);
 for i = 1:n
@@ -47,6 +49,10 @@ for i = 1:n
         - Kv*(joint_vel - theta_init(:,2)) + G;
     J = basketJacobian(joint_angles);
 
+%     if(max(tau) > max_t)
+%         max_t = max(tau);
+%     end
+    
 %     table(joint_angles,joint_vel,tau) % For debugging
     % Apply joint torque limits
     tau(tau>tau_max) = tau_max;
@@ -69,6 +75,7 @@ for i = 1:n
     
 end
 fprintf('\b\b\b\b\b\bDone!\n');
+% disp(max_t);
 %Theta Generated for each time step
 joint_angles_mat = X(1:5,:);
 joint_velocities_mat = X(6:10,:);

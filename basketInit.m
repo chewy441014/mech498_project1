@@ -71,7 +71,7 @@ robot.colors{5} = [1,0,1];
 robot.colors{6} = [0,1,1];
 
 %Basket goal location
-robot.goal.pos = [0; 1.5; 2];
+robot.goal.pos = [0; 1.4; 2];
 robot.goal.predunking = robot.goal.pos + [0; -l_4; l_4];
 %Changing the goal position will require prebasket end effector position to
 %require adjustment, as it is not dynamic as of right now.

@@ -8,7 +8,7 @@ set(robot.handles(3),'Matrix',robot_T{3});
 set(robot.handles(4),'Matrix',robot_T{4});
 set(robot.handles(5),'Matrix',robot_T{5});
 set(robot.handles(6),'Matrix',robot_T{6});
-robot.handles(8).String = strcat( 'Current Time:', '  ', num2str(timenow), 'seconds');
+robot.handles(8).String = sprintf('Current Time: %.2f seconds',timenow);
 robot.handles(9).String = strcat(state);
 drawnow;
 

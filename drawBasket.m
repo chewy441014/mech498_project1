@@ -32,7 +32,7 @@ marker_size = 10;
 vector_size = 0.05*max(abs(diff(reshape(robot.workspace,2,3))));
 
 % Create figure window
-figure('Color','w');
+figure('Color','w','units','normalized','outerposition',[0 0 1 1])
 
 % Create axes object
 ax = axes('XLim',robot.workspace(1:2),'YLim',robot.workspace(3:4),...
@@ -103,7 +103,7 @@ set(hg,'Parent',T_4);
 h = drawRobotFrame(robot.colors{5});
 hg = hggroup('Parent',ax);
 set(h,'Parent',hg);
-L_5 = line([0,0],[-l_4,0],[0,0],...
+L_5 = line([0,l_4],[0,0],[0,0],...
     'Color',robot.colors{5},'LineWidth',d4*100);
 set(L_5,'Parent',hg);
 T_5 = hgtransform('Parent',T_4,'Matrix',robot_T{5});
