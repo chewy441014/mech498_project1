@@ -3,7 +3,6 @@ function simulateBasket(pos_ball, vel_ball)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Initialize things
 dt = 0.00009; % Time step
-frames_per_second = 60; % For video output
 robot = basketInit();
 home_pos = robot.home_pos;
 home_angles = robot.home_angles;
@@ -107,42 +106,6 @@ for i = 1:skip_frames2:length(time2)
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% % Moving to the pre-dunk position
-% disp('Moving to the pre-dunk position');
-% 
-% predunking = robot.goal.predunking; % Gets the position of the end effector in preparation for dunking
-% T_prebasket = eye(4); T_prebasket(1:3,4) = predunking; % Assembles transformation matrix using pre-dunking end effector position
-% [~, pre_dunk_angles] = basketIK(T_prebasket, zeros(5,1), robot);
-% 
-% time3 = 0:dt:2*t_f; % We are in no rush to get the robot over to the Pre-basket position, we can make this value higher if we want.
-% theta_init2 = [end_angles2, zeros(5,1)];
-% theta_ref = [pre_dunk_angles, zeros(5,1)];
-% 
-% K_p2 = 20*ones(5,1);
-% K_v2 = 20*ones(5,1);
-% fprintf('\n')
-% disp('Control Basket PID')
-% disp('      ')
-% [joint_angles_mat3,~] = controlBasketPID(theta_init2, theta_ref, K_p2, K_v2, time3, robot);
-% end_angles3 = joint_angles_mat3(:,end);
-% 
-% fprintf('\n')
-% disp('Calculating new Ball Pos ')
-% disp('      ')
-% 
-% number_of_frames3 = time3(end)*frames_per_second;
-% skip_frames3 = round(length(time3)/number_of_frames3);
-% 
-% n = length(time3);
-% ball_pos2 = zeros(3,n);
-% for i = 1:skip_frames3:length(time3)
-%     fprintf(1,'\b\b\b\b\b\b%01.4f',i/n);
-%     [T,~] = basketFK(joint_angles_mat3(:,i), robot);
-%     ball_pos2(:,i) = T(1:3,4) + [0; 0; robot.parameters.l_1];
-% end
-% 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Move robot to predunking position and then dunk
 
 [joint_angles_mat3, time3] = Dunking(end_angles2, dt);
@@ -173,6 +136,15 @@ dunk_ball_pos = ball_pos3_extract(:, end);
 % number_of_frames4 = time4(end)*frames_per_second;
 % skip_frames4 = round(length(time4)/number_of_frames4);
 skip_frames4 = round(0.0167/dt);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Follow trajectory back to the home position
+
+t_f = 5;
+end_angles5 = joint_angles_mat3(:,end);
+trajectory = createCelebrateTrajectory(end_angles5,dt,t_f,robot);
+time5 = 0:dt:t_f;
+joint_angles_mat5 = controlDunkPID([end_angles5, zeros(5,1)], trajectory, Kp, Kv, time5, robot);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Draw the robot
@@ -217,13 +189,25 @@ while draw
         pause(frame_time - val)
     end
     passed_time = passed_time + length(time3)*dt;
-    for t = 1:skip_frames4:length(time4)-1
+%     for t = 1:skip_frames4:length(time4)-1
+%         tic;
+%         setBasket(joint_angles_mat3(:,end), passed_time + t*dt, 'Ball Bouncing', robot);
+%         O = robot.handles(7).Children;
+%         set(O, 'XData', bounce_trajectory(1,t));
+%         set(O, 'YData', bounce_trajectory(2,t));
+%         set(O, 'ZData', bounce_trajectory(3,t));
+%         val = toc;
+%         pause(frame_time - val)
+%     end
+    for t = 1:skip_frames1:length(time5)
         tic;
-        setBasket(joint_angles_mat3(:,end), passed_time + t*dt, 'Ball Bouncing', robot);
-        O = robot.handles(7).Children;
-        set(O, 'XData', bounce_trajectory(1,t));
-        set(O, 'YData', bounce_trajectory(2,t));
-        set(O, 'ZData', bounce_trajectory(3,t));
+        setBasket(joint_angles_mat5(:,t), t*dt, 'Ball Bouncing and Moving Home', robot);
+        if time5(t) <= time4(end)
+            O = robot.handles(7).Children;
+            set(O, 'XData', ball_traj(1,t));
+            set(O, 'YData', ball_traj(2,t));
+            set(O, 'ZData', ball_traj(3,t));    
+        end
         val = toc;
         pause(frame_time - val)
     end

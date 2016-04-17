@@ -40,9 +40,9 @@ pz_4 = p_4(3);
 % bottom are defined by the maximum arm extension
 if(sqrt(T(1,4)^2 + T(2,4)^2) > xmax || T(3,4) > zmax || T(3,4) < zmin)
     is_solution = false;
-    fprintf('\n')
-    disp('Target location is not within the workspace');
-    pause(1)
+    %fprintf('\n')
+    %disp('Target location is not within the workspace');
+    %pause(1)
 else
     is_solution = true;
 end
