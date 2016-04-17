@@ -4,12 +4,13 @@ function [joint_angles_mat] = controlDunkPID(theta_init, trajectory, K_p, K_v, t
 % 
 
 % Define the max joint torques
-tau_max = 2000000000; % scaler [Nm]
+tau_max = 150; % scaler [Nm]
 
 n = length(time);
 dt = time(2) - time(1);
 X = zeros(10,n); % initialize variable to hold state vector
 X_dot = zeros(10,n); % initialize variable to hold state vector derivatives
+
 
 for i = 1:n
     fprintf(1,'\b\b\b\b\b\b%01.4f',i/n);

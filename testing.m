@@ -1,16 +1,23 @@
+%%
+robot = basketInit();
+drawBasket([pi/2; 0.08; -0.57; 0; 0],[0;0;0],robot);
+
+
+%%
 robot = basketInit();
 l_1 = robot.parameters.l_1;
 l_2 = robot.parameters.l_2;
 l_3 = robot.parameters.l_3;
 l_4 = robot.parameters.l_4;
-theta_x = pi;
+theta_x = pi/0.9;
 R_x = [1 0 0; 0 cos(theta_x) -sin(theta_x); 0 sin(theta_x) cos(theta_x)];
 T = R_x;
-% T(1:4,4) = [l_3 0 l_2+l_4 1]';
 T(1:4,4) = [robot.goal.pos; 1];
 
 [~, joint_angles] = basketIK(T,zeros(5,1),robot);
-drawBasket(joint_angles,robot)
+drawBasket(joint_angles,[0; 0; 0],robot)
+
+joint_angles
 
 %%
 robot = basketInit();
@@ -62,19 +69,25 @@ disp('Done!');
 %%
 clc
 pos_ball = [5 -5 0];
-vel_ball = [-2.5 3 12];
+vel_ball = [-1.5 1 15];
 simulateBasket(pos_ball, vel_ball);
 
 %%
 clc
-pos_ball = [5 0 0];
-vel_ball = [-1.5 0 12];
+pos_ball = [5 5 0];
+vel_ball = [-2 -2.2 12];
 simulateBasket(pos_ball, vel_ball);
 
 %%
 clc
-pos_ball = [5 -5 0];
-vel_ball = [-2.5 3 12];
+pos_ball = [20 0 0];
+vel_ball = [-12 -0.7 10];
+simulateBasket(pos_ball, vel_ball);
+
+%%
+clc
+pos_ball = [5 5 0];
+vel_ball = [-2 -2.2 12];
 
 
 dt = 0.00009; % Time step

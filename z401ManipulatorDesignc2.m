@@ -9,10 +9,10 @@ robot = basketInit();
 % robot = robotInit array
 
 % Cross-sectional areas of each arm member
-d1 = robot.parameters.d_1;
-d2 = robot.parameters.d_2;
-d3 = robot.parameters.d_3;
-d4 = robot.parameters.d_4;
+d1 = 1.5*robot.parameters.d_1;
+d2 = 1.5*robot.parameters.d_2;
+d3 = 1.5*robot.parameters.d_3;
+d4 = 1.5*robot.parameters.d_4;
 
 A1 = pi/4*d1^2;
 A2 = pi/4*d2^2;
@@ -24,7 +24,7 @@ m1 = robot.parameters.m_1;
 m2 = robot.parameters.m_2;
 m3 = robot.parameters.m_3;
 m4 = robot.parameters.m_4;
-m5 = 5;
+m5 = 2;
 
 %Constants for deflection,SF
 g = robot.const.g;
@@ -230,6 +230,9 @@ maxdef=min(y)
 %plotting Deflection of links 3 and 4
 figure
 plot(x,y)
+title('Deflection of Upper Arm for D=4.5 cm')
+xlabel('Distance along Upper Arm (m)')
+ylabel('Deflection (m)')
 
 
 return
