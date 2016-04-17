@@ -8,8 +8,8 @@ init_pos = T(1:3, 4);
 pos_ref = T(1:3, 4);
 distance = norm(abs(init_pos - pos_ref));
 avg_vel = 1;
-t_f = distance/avg_vel;
-time1 = 0:dt:t_f;
+t_f1 = distance/avg_vel;
+time1 = 0:dt:t_f1;
 
 K_p = 100*ones(1, 5);
 K_v = 20*ones(1, 5);
@@ -25,7 +25,7 @@ theta_ref2 = [theta_ref2 theta_dot_ref];
 [T, ~] = basketFK(theta_ref2, robot);
 pos_ref = T(1:3, 4);
 t_f = (theta_ref2(end) - theta_ref1(end))/(theta_dot_ref(end));
-time2 = 0:dt:t_f;
+time2 = t_f1:dt:t_f1 + t_f;
 
 K_p = 150*ones(1, 5);
 K_v = 20*ones(1, 5);

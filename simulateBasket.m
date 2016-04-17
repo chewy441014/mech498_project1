@@ -3,7 +3,6 @@ function simulateBasket(pos_ball, vel_ball)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Initialize things
 dt = 0.00009; % Time step
-frames_per_second = 60; % For video output
 robot = basketInit();
 home_pos = robot.home_pos;
 home_angles = robot.home_angles;
@@ -74,7 +73,7 @@ end_angles = joint_angles_mat1(:,end);
 % Animation output settings
 % number_of_frames1 = time1(end)*frames_per_second;
 % skip_frames1 = round(length(time1)/number_of_frames1);
-skip_frames1 = round(0.0167/dt);
+skip_frames = round(0.0167/dt);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Catching the ball and remaining stationary (Impulse Input)
@@ -95,7 +94,6 @@ end_angles2 = joint_angles_mat2(:,end);
 % Animation settings
 % number_of_frames2 = time2(end)*frames_per_second;
 % skip_frames2 = round(length(time2)/number_of_frames2);
-skip_frames2 = round(0.0167/dt);
 
 % Find the position of the ball from the simulation
 disp('Calculating position of ball during impulse simulation');
@@ -150,7 +148,7 @@ end
 % Animation settings
 % number_of_frames3 = time3(end)*frames_per_second;
 % skip_frames3 = round(length(time3)/number_of_frames3);
-skip_frames3 = round(0.0167/dt);
+
 
 disp('Calculating position of ball during dunking simulation')
 n = length(time3);
@@ -172,7 +170,7 @@ dunk_ball_pos = ball_pos3_extract(:, end);
 % Animation settings
 % number_of_frames4 = time4(end)*frames_per_second;
 % skip_frames4 = round(length(time4)/number_of_frames4);
-skip_frames4 = round(0.0167/dt);
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Draw the robot
@@ -184,7 +182,7 @@ frame_time = 0.1;
 while draw
     robot.handles = drawBasket(theta_init, pos_ball, robot);
     
-    for t = 1:skip_frames1:length(time1)
+    for t = 1:skip_frames:length(time1)
         tic;
         setBasket(joint_angles_mat1(:,t), t*dt, 'Catching Ball', robot);
         O = robot.handles(7).Children;
@@ -195,7 +193,7 @@ while draw
         pause(frame_time - val)
     end
     passed_time = length(time1)*dt;
-    for t = 1:skip_frames2:length(time2)
+    for t = 1:skip_frames:length(time2)
         tic;
         setBasket(joint_angles_mat2(:,t), passed_time + t*dt, 'Impulse Control', robot);
         O = robot.handles(7).Children;
@@ -206,7 +204,7 @@ while draw
         pause(frame_time - val)
     end
     passed_time = passed_time + length(time2)*dt;
-    for t = 1:skip_frames3:length(time3)
+    for t = 1:skip_frames:length(time3)
         tic;
         setBasket(joint_angles_mat3(:,t), passed_time + t*dt, 'Dunking', robot);
         O = robot.handles(7).Children;
@@ -217,7 +215,7 @@ while draw
         pause(frame_time - val)
     end
     passed_time = passed_time + length(time3)*dt;
-    for t = 1:skip_frames4:length(time4)-1
+    for t = 1:skip_frames:length(time4)-1
         tic;
         setBasket(joint_angles_mat3(:,end), passed_time + t*dt, 'Ball Bouncing', robot);
         O = robot.handles(7).Children;
