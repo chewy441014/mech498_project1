@@ -24,7 +24,6 @@ m1 = robot.parameters.m_1;
 m2 = robot.parameters.m_2;
 m3 = robot.parameters.m_3;
 m4 = robot.parameters.m_4;
-m5 = 2;
 
 %Constants for deflection,SF
 g = robot.const.g;
@@ -37,6 +36,14 @@ l1 = robot.parameters.l_1;
 l2 = robot.parameters.l_2;
 l3 = robot.parameters.l_3;
 l4 = robot.parameters.l_4;
+
+m1 = pi/4*d1^2*l1*rho;
+m2 = pi/4*d2^2*l2*rho;
+m3 = pi/4*d3^2*l3*rho;
+m4 = pi/4*d4^2*l4*rho;
+m5 = 2;
+
+
 
 % Test joint torques at the zero position
 joint_angles = [0;-pi/2;pi/2;0;0];
