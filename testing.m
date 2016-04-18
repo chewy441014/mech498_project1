@@ -167,12 +167,18 @@ scatter3(ball_traj(1,:),ball_traj(2,:),ball_traj(3,:),1)
 robot = basketInit();
 dt = 0.0001; % Time step
 skip_frames = round(0.0225/dt);
-theta_ref2 = [pi/2; 0.15; -0.6; 0; pi/4];
+trag_ref = [pi/2; 0.15; -0.6; 0; 0];
+theta_ref2 = [
+    1.5708;
+    0.1609;
+   -0.6221;
+         0;
+   -0.2999];
 K_p = [200 200 200 1 1];
 K_v = [40 40 40 1 1];
 
 t_f = 5;
-trajectory = createCelebrateTrajectory(theta_ref2,dt,t_f,robot);
+trajectory = createCelebrateTrajectory(trag_ref,dt,t_f,robot);
 
 time5 = 0:dt:100*dt*(length(trajectory)-1);
 joint_angles_mat5 = controlDunkPID([theta_ref2, zeros(5,1)], trajectory, K_p, K_v, time5, robot);

@@ -102,6 +102,7 @@ end
 % Move robot to predunking position and then dunk
 
 [joint_angles_mat3, time3] = Dunking(end_angles2, dt);
+end_angles_3 = joint_angles_mat3(:,end);
 
 disp('Calculating position of ball during dunking simulation')
 n = length(time3);
@@ -127,11 +128,11 @@ K_p = [200 200 200 1 1];
 K_v = [40 40 40 1 1];
 
 t_f = 5;
-theta_ref2 = [pi/2; 0.15; -0.6; 0; pi/4];
+theta_ref2 = [pi/2; 0.15; -0.6; 0; 0];
 trajectory = createCelebrateTrajectory(theta_ref2,dt,t_f,robot);
 len = length(trajectory)-1;
 time5 = 0:dt:100*dt*len;
-joint_angles_mat5 = controlDunkPID([theta_ref2, zeros(5,1)], trajectory, K_p, K_v, time5, robot);
+joint_angles_mat5 = controlDunkPID([end_angles_3, zeros(5,1)], trajectory, K_p, K_v, time5, robot);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Draw the robot
