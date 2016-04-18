@@ -48,7 +48,7 @@ for i = 1:n
 
 %         table(X(1:5,i) ,X(6:10,i), Theta_ref, Theta_dot_ref)
         % Gravity Compensation Control
-        tau = -K_p'.*(joint_angles-Theta_ref)-K_v'.*(joint_vel-zeros(5,1)) + G; % control input (torque)
+        tau = -K_p'.*(joint_angles-Theta_ref)-K_v'.*(joint_vel-Theta_dot_ref) + G; % control input (torque)
 
         % Apply joint torque limits
         tau(tau>tau_max) = tau_max;

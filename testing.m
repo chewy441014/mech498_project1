@@ -1,11 +1,12 @@
 %%
 robot = basketInit();
-theta_ref2 = [pi/2; 0.15; -0.6; 0; 0];
-% theta_ref2 = [0; 0; 0; 0; 0];
+% theta_ref2 = [pi/2; 0.15; -0.6; 0; 0];
+theta_ref2 = [0; 0; 0; 0; 0];
 % T = eye(3);
 % T(1:4,4) = [robot.goal.pos; 1];
 T = basketFK(theta_ref2,robot);
 T(3,4) = T(3,4) + robot.parameters.l_1;
+% T(1:3,1:3) = [1 0 0; 0 0 -1; 0 1 0]
 [~,joint_angles] = basketIK(T,theta_ref2,robot);
 drawBasket(joint_angles,[0;0;0],robot);
 
@@ -167,10 +168,10 @@ robot = basketInit();
 dt = 0.0001; % Time step
 skip_frames = round(0.0225/dt);
 theta_ref2 = [pi/2; 0.15; -0.6; 0; pi/4];
-K_p = [125 125 100 100 200];
-K_v = [30 30 35 20 30];
+K_p = [200 200 200 1 1];
+K_v = [40 40 40 1 1];
 
-t_f = 10;
+t_f = 5;
 trajectory = createCelebrateTrajectory(theta_ref2,dt,t_f,robot);
 
 time5 = 0:dt:t_f;

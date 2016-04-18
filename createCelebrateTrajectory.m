@@ -29,7 +29,7 @@ function trajectory = createCelebrateTrajectory(joint_angles_init,dt,t_f,robot)
         else
             disp('Something fucked up')
         end
-        T1 = T(1:3,1:3); T1(1:4,4) = [pos; 1];
+        T1 = [1 0 0; 0 0 -1; 0 1 0]; T1(1:4,4) = [pos; 1];
         if i > 1
             [~, joint_angles] = basketIK(T1, joint_angles_mat(:,i-1), robot);
         else
@@ -38,11 +38,14 @@ function trajectory = createCelebrateTrajectory(joint_angles_init,dt,t_f,robot)
         
         joint_angles_mat(:,i) = joint_angles';
     end
-    
     joint_vel_mat = zeros(5,len);
+    % Forward difference
+    joint_vel_mat(:,1) = (joint_angles_mat(:,2) - joint_angles_mat(:,1))/(200*dt);
+    % Backwards difference
+    joint_vel_mat(:,end) = (joint_angles_mat(:,end) - joint_angles_mat(:,end-1))/(200*dt);
     for i = 2:len-1
         joint_vel_mat(:,i) = (joint_angles_mat(:,i+1) - ...
-            joint_angles_mat(:,i-1))/(2*dt);
+            joint_angles_mat(:,i-1))/(200*dt);
     end
     
 %     drawBasket([0 0 0 0 0],[0; 0; 0],robot);
