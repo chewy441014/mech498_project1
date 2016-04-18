@@ -182,18 +182,18 @@ while draw
     passed_time = passed_time + length(time3)*dt;
     for t = 1:skip_frames:length(time5)
 %         tic;
-        setBasket(joint_angles_mat5(:,t), t*dt, 'Ball Bouncing and Moving Home', robot);
+        setBasket(joint_angles_mat5(:,t), passed_time + t*dt, 'Ball Bouncing and Moving Home', robot);
         if time5(t) <= time4(end)
             O = robot.handles(7).Children;
-            set(O, 'XData', ball_trajectory(1,t));
-            set(O, 'YData', ball_trajectory(2,t));
-            set(O, 'ZData', ball_trajectory(3,t));    
+            set(O, 'XData', bounce_trajectory(1,t));
+            set(O, 'YData', bounce_trajectory(2,t));
+            set(O, 'ZData', bounce_trajectory(3,t));    
         end
         writeVideo(robotVideo, getframe)
 %         val = toc;
 %         pause(frame_time - val)
     end
-    passed_time = passed_time + length(time4)*dt;
+    passed_time = passed_time + length(time5)*dt;
     setBasket(joint_angles_mat5(:,end), passed_time, 'Task Completed', robot);
     O = robot.handles(7).Children;
     set(O, 'XData', bounce_trajectory(1,end));
