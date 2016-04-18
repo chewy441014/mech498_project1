@@ -1,5 +1,30 @@
 %%
 robot = basketInit();
+dt = 0.0001; % Time step
+skip_frames = round(0.0225/dt);
+trag_ref = [pi/2; 0.15; -0.6; 0; 0];
+theta_ref2 = [
+    1.570796326794897;
+    0.160884652082446;
+   -0.622080992427661;
+         0;
+   -0.299878597046256];
+K_p = [200 200 200 1 1];
+K_v = [40 40 40 1 1];
+
+t_f = 5;
+trajectory = createCelebrateTrajectory(trag_ref,dt,t_f,robot);
+
+time5 = 0:dt:100*dt*(length(trajectory)-1);
+joint_angles_mat5 = controlDunkPID([theta_ref2, zeros(5,1)], trajectory, K_p, K_v, time5, robot);
+
+robot.handles = drawBasket(theta_ref2, [0;0;0], robot);
+for t = 1:skip_frames:length(time5)
+        setBasket(joint_angles_mat5(:,t), t*dt, 'Ball Bouncing and Moving Home', robot);
+end
+
+%%
+robot = basketInit();
 % theta_ref2 = [pi/2; 0.15; -0.6; 0; 0];
 theta_ref2 = [0; 0; 0; 0; 0];
 % T = eye(3);
@@ -97,8 +122,8 @@ simulateBasket(pos_ball, vel_ball);
 
 %%
 clc
-pos_ball = [5 -5 0];
-vel_ball = [-1.5 1 15];
+pos_ball = [20 0 0];
+vel_ball = [-12 -0.7 10];
 
 
 dt = 0.001; % Time step
@@ -166,6 +191,7 @@ scatter3(ball_traj(1,:),ball_traj(2,:),ball_traj(3,:),1)
 %%
 robot = basketInit();
 dt = 0.0001; % Time step
+keyboard
 skip_frames = round(0.0225/dt);
 trag_ref = [pi/2; 0.15; -0.6; 0; 0];
 theta_ref2 = [

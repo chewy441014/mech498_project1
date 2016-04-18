@@ -127,6 +127,7 @@ dunk_ball_pos = ball_pos3_extract(:, end);
 K_p = [200 200 200 1 1];
 K_v = [40 40 40 1 1];
 
+robot.ball.mass = 0;
 t_f = 5;
 theta_ref2 = [pi/2; 0.15; -0.6; 0; 0];
 trajectory = createCelebrateTrajectory(theta_ref2,dt,t_f,robot);
