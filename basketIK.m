@@ -31,7 +31,7 @@ T(3,4) = T(3,4) - l_1;
 
 % Find point (px',py',pz') given (px,py,pz). This point corresponds to the
 % point at which frame 4 is located
-p_4 = T*[0; 0; -l_4; 1];
+p_4 = T*[-l_4; 0; 0; 1];
 px_4 = p_4(1);
 py_4 = p_4(2);
 pz_4 = p_4(3);
@@ -141,12 +141,17 @@ for config = 1:size(joint_sols,2)
     [~, robot_T] = basketFK(joint_sols(:,config), robot);
     T_04 = robot_T{1}*robot_T{2}*robot_T{3}*robot_T{4};
     R_04 = T_04(1:3,1:3);
-    R_46 = R_04\T(1:3,1:3);
+    R_46 = R_04\(T(1:3,1:3));
 
+    T_56 = robot_T{6};
+    R_45 = R_46*(T_56(1:3,1:3)');
+    T_03 = robot_T{1}*robot_T{2}*robot_T{3};
+    R_03 = T_04(1:3,1:3);
+    R_34 = R_03\T_04(1:3,1:3);
     % Solve for joint 4 and 5 using Z-Y-Z Euler angles
-    joint_sols(5,config) = atan2(sqrt(R_46(3,1)^2 + R_46(3,2)^2), R_46(3,3));
-    joint_sols(4,config) = atan2(R_46(2,3)/sin(joint_sols(5,config)), R_46(1,3)/sin(joint_sols(5,config)));
-
+    joint_sols(5,config) = asin(R_45(1,1));
+    joint_sols(4,config) = acos(R_34(1,1));
+    
 end
 
 
@@ -160,7 +165,7 @@ for i = 1:size(joint_sols,2)
         % Display all feasible configurations if desired
         if(showAllConfigs)
 %             disp(i);
-            drawBasket(joint_sols(:,i), robot);
+            drawBasket(joint_sols(:,i), [0;0;0], robot);
         end
         
         % If robot is inside joint limits, check how close robot is to

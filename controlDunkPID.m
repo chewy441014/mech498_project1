@@ -61,6 +61,7 @@ for i = 1:n
             + X_dot(6:10,i))*dt;
         X(1:5,i) = X(1:5,i-1) + 0.5*(X_dot(1:5,i-1) + ...
             X_dot(1:5,i))*dt;
+        
     end
     
 end

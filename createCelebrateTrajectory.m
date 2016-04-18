@@ -1,8 +1,9 @@
-function trajectory = createCelebrateTrajectory(joint_angles,dt,t_f,robot)
+function trajectory = createCelebrateTrajectory(joint_angles_init,dt,t_f,robot)
 %%%
     time = 0:100*dt:t_f;
     len = length(time);
-    [T,~] = basketFK(joint_angles,robot);
+    [T,~] = basketFK(joint_angles_init,robot);
+    T(3,4) = T(3,4) + robot.parameters.l_1;
     start_pos = T(1:3,4);
     via1 = [1.5,1.4,2.5]'; %change if the inverse kinematics 
     final_pos = robot.home_pos;
@@ -29,11 +30,11 @@ function trajectory = createCelebrateTrajectory(joint_angles,dt,t_f,robot)
         else
             disp('Something fucked up')
         end
-        T1 = T(1:3,1:3); T1(1:3,4) = pos;
+        T1 = T(1:3,1:3); T1(1:4,4) = [pos; 1];
         if i > 1
             [~, joint_angles] = basketIK(T1, joint_angles_mat(:,i-1), robot);
         else
-            [~, joint_angles] = basketIK(T1, [0 0 0 0 0], robot);
+            [~, joint_angles] = basketIK(T1, joint_angles_init, robot);
         end
         
         joint_angles_mat(:,i) = joint_angles';

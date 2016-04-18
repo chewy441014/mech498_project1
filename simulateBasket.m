@@ -32,15 +32,15 @@ end
 t_f = intersect_time;
 % Find the orientation of the ball when the robot intercepts it
 tangent = ball_traj(:,intersect_dt-1) - ball_traj(:,intersect_dt);
-theta_y = atan2(tangent(1),tangent(3));
-theta_z = atan2(tangent(2),tangent(1));
+theta_y = -acos(tangent(1)/norm(tangent));
+theta_x = atan2(tangent(3),tangent(2));
 Ry = [cos(theta_y) 0 sin(theta_y);
     0 1 0;
     -sin(theta_y) 0 cos(theta_y)];
-Rz = [cos(theta_z) -sin(theta_z) 0;
-    sin(theta_z) cos(theta_z) 0;
-    0 0 1];
-R = Rz*Ry;
+Rx = [1 0 0;
+    0 cos(theta_x) -sin(theta_x);
+    0 sin(theta_x) cos(theta_x)];
+R = Ry*Rx;
 T = R;
 T(1:4,4) = [ball_traj(:,intersect_dt); 1];
 
