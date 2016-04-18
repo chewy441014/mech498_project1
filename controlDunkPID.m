@@ -4,7 +4,7 @@ function [joint_angles_mat] = controlDunkPID(theta_init, trajectory, K_p, K_v, t
 % 
 
 % Define the max joint torques
-tau_max = 150; % scaler [Nm]
+tau_max = 1500; % scaler [Nm]
 
 n = length(time);
 dt = time(2) - time(1);
@@ -46,8 +46,9 @@ for i = 1:n
         y2 = trajectory(6:10,j(i)+1);
         Theta_dot_ref = y1 + (y2 - y1)*(x - x1)/(x2 - x1);
 
+%         table(X(1:5,i) ,X(6:10,i), Theta_ref, Theta_dot_ref)
         % Gravity Compensation Control
-        tau = -K_p'.*(joint_angles-Theta_ref)-K_v'.*(joint_vel-Theta_dot_ref) + G; % control input (torque)
+        tau = -K_p'.*(joint_angles-Theta_ref)-K_v'.*(joint_vel-zeros(5,1)) + G; % control input (torque)
 
         % Apply joint torque limits
         tau(tau>tau_max) = tau_max;

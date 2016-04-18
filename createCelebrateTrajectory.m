@@ -5,7 +5,7 @@ function trajectory = createCelebrateTrajectory(joint_angles_init,dt,t_f,robot)
     [T,~] = basketFK(joint_angles_init,robot);
     T(3,4) = T(3,4) + robot.parameters.l_1;
     start_pos = T(1:3,4);
-    via1 = [1.5,1.4,2.5]'; %change if the inverse kinematics 
+    via1 = [1,0.6,2.5]'; %change if the inverse kinematics 
     final_pos = robot.home_pos;
     len2 = round(len/2);
     len3 = len - len2;
@@ -20,7 +20,6 @@ function trajectory = createCelebrateTrajectory(joint_angles_init,dt,t_f,robot)
         0:path_cart_2(3)/(len3-1):path_cart_2(3)];
     
     joint_angles_mat = zeros(5,len);
-    joint_vel_mat = zeros(5,len);
     for i = 1:len
         fprintf(1,'\b\b\b\b\b\b%01.4f',i/len);
         if i <= len2
@@ -38,11 +37,20 @@ function trajectory = createCelebrateTrajectory(joint_angles_init,dt,t_f,robot)
         end
         
         joint_angles_mat(:,i) = joint_angles';
-        if i > 1
-            joint_vel_mat(:,i) = (joint_angles_mat(:,i) - ...
-                joint_angles_mat(:,i-1))/dt;
-        end
     end
+    
+    joint_vel_mat = zeros(5,len);
+    for i = 2:len-1
+        joint_vel_mat(:,i) = (joint_angles_mat(:,i+1) - ...
+            joint_angles_mat(:,i-1))/(2*dt);
+    end
+    
+%     drawBasket([0 0 0 0 0],[0; 0; 0],robot);
+%     hold on;
+%     scatter3(path_cart_1(1,:),path_cart_1(2,:),path_cart_1(3,:),1)
+%     scatter3(path_cart_2(1,:),path_cart_2(2,:),path_cart_2(3,:),1)
+
+    
     trajectory(1:5,:) = joint_angles_mat; %Joint angles
     trajectory(6:10,:) = joint_vel_mat; %Joint velocities
 end
