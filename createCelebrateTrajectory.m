@@ -1,6 +1,6 @@
 function trajectory = createCelebrateTrajectory(joint_angles,dt,t_f,robot)
 %%%
-    time = 0:dt:t_f;
+    time = 0:100*dt:t_f;
     len = length(time);
     [T,~] = basketFK(joint_angles,robot);
     start_pos = T(1:3,4);
@@ -19,7 +19,7 @@ function trajectory = createCelebrateTrajectory(joint_angles,dt,t_f,robot)
         0:path_cart_2(3)/(len3-1):path_cart_2(3)];
     
     joint_angles_mat = zeros(5,len);
-%     joint_vel_mat = zeros(5,len);
+    joint_vel_mat = zeros(5,len);
     for i = 1:len
         fprintf(1,'\b\b\b\b\b\b%01.4f',i/len);
         if i <= len2
@@ -37,11 +37,11 @@ function trajectory = createCelebrateTrajectory(joint_angles,dt,t_f,robot)
         end
         
         joint_angles_mat(:,i) = joint_angles';
-%         if i > 1
-%             joint_vel_mat(:,i) = (joint_angles_mat(:,i) - ...
-%                 joint_angles_mat(:,i-1))/dt;
-%         end
+        if i > 1
+            joint_vel_mat(:,i) = (joint_angles_mat(:,i) - ...
+                joint_angles_mat(:,i-1))/dt;
+        end
     end
     trajectory(1:5,:) = joint_angles_mat; %Joint angles
-    %trajectory(6:10,:) = joint_vel_mat; %Joiint velocities
+    trajectory(6:10,:) = joint_vel_mat; %Joint velocities
 end

@@ -123,11 +123,14 @@ dunk_ball_pos = ball_pos3_extract(:, end);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Follow trajectory back to the home position
 
+K_p = 1/1000000*[100 100 100 100 200];
+K_v = 1/100000*[40 40 35 20 30];
+
 t_f = 5;
 end_angles5 = joint_angles_mat3(:,end);
 trajectory = createCelebrateTrajectory(end_angles5,dt,t_f,robot);
 time5 = 0:dt:t_f;
-joint_angles_mat5 = controlDunkPID([end_angles5, zeros(5,1)], trajectory, Kp, Kv, time5, robot);
+joint_angles_mat5 = controlDunkPID([end_angles5, zeros(5,1)], trajectory, K_p, K_v, time5, robot);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Draw the robot
@@ -177,14 +180,14 @@ while draw
 %         pause(frame_time - val)
     end
     passed_time = passed_time + length(time3)*dt;
-    for t = 1:skip_frames1:length(time5)
+    for t = 1:skip_frames:length(time5)
 %         tic;
         setBasket(joint_angles_mat5(:,t), t*dt, 'Ball Bouncing and Moving Home', robot);
         if time5(t) <= time4(end)
             O = robot.handles(7).Children;
-            set(O, 'XData', ball_traj(1,t));
-            set(O, 'YData', ball_traj(2,t));
-            set(O, 'ZData', ball_traj(3,t));    
+            set(O, 'XData', ball_trajectory(1,t));
+            set(O, 'YData', ball_trajectory(2,t));
+            set(O, 'ZData', ball_trajectory(3,t));    
         end
         writeVideo(robotVideo, getframe)
 %         val = toc;

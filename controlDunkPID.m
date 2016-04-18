@@ -11,6 +11,15 @@ dt = time(2) - time(1);
 X = zeros(10,n); % initialize variable to hold state vector
 X_dot = zeros(10,n); % initialize variable to hold state vector derivatives
 
+len = length(trajectory);
+j = [];
+for i = 1:len
+    if i == len
+        j = [j, i-1];
+    else
+        j = [j, i*ones(1,100)];
+    end
+end
 
 for i = 1:n
     fprintf(1,'\b\b\b\b\b\b%01.4f',i/n);
@@ -25,15 +34,20 @@ for i = 1:n
 
         % Dynamic Model
         [M,V,G] = basketDynamics(joint_angles, joint_vel, robot);
-        if cond(M) > 1e+10
-            disp(M)
-        end
-
-        Theta_ref = trajectory(:,i);
-        Theta_dot_ref = (trajectory(:,i) - trajectory(:,i-1))/dt;
+        
+        % Trajectory interpolation
+        y1 = trajectory(1:5,j(i));
+        y2 = trajectory(1:5,j(i)+1);
+        x1 = 100*dt*j(i);
+        x2 = 100*dt*(j(i)+1);
+        x = x1+dt*(mod(i,100));
+        Theta_ref = y1 + (y2 - y1)*(x - x1)/(x2 - x1);
+        y1 = trajectory(6:10,j(i));
+        y2 = trajectory(6:10,j(i)+1);
+        Theta_dot_ref = y1 + (y2 - y1)*(x - x1)/(x2 - x1);
 
         % Gravity Compensation Control
-        tau = -K_p.*(joint_angles-Theta_ref)-K_v.*(joint_vel-Theta_dot_ref) + G; % control input (torque)
+        tau = -K_p'.*(joint_angles-Theta_ref)-K_v'.*(joint_vel-Theta_dot_ref) + G; % control input (torque)
 
         % Apply joint torque limits
         tau(tau>tau_max) = tau_max;
