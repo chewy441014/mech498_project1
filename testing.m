@@ -174,7 +174,7 @@ K_v = [40 40 40 1 1];
 t_f = 5;
 trajectory = createCelebrateTrajectory(theta_ref2,dt,t_f,robot);
 
-time5 = 0:dt:t_f;
+time5 = 0:dt:100*dt*(length(trajectory)-1);
 joint_angles_mat5 = controlDunkPID([theta_ref2, zeros(5,1)], trajectory, K_p, K_v, time5, robot);
 
 robot.handles = drawBasket(theta_ref2, [0;0;0], robot);

@@ -123,14 +123,15 @@ dunk_ball_pos = ball_pos3_extract(:, end);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Follow trajectory back to the home position
 
-K_p = 1/1000000*[100 100 100 100 200];
-K_v = 1/100000*[40 40 35 20 30];
+K_p = [200 200 200 1 1];
+K_v = [40 40 40 1 1];
 
 t_f = 5;
-end_angles5 = joint_angles_mat3(:,end);
-trajectory = createCelebrateTrajectory(end_angles5,dt,t_f,robot);
-time5 = 0:dt:t_f;
-joint_angles_mat5 = controlDunkPID([end_angles5, zeros(5,1)], trajectory, K_p, K_v, time5, robot);
+theta_ref2 = [pi/2; 0.15; -0.6; 0; pi/4];
+trajectory = createCelebrateTrajectory(theta_ref2,dt,t_f,robot);
+len = length(trajectory)-1;
+time5 = 0:dt:100*dt*len;
+joint_angles_mat5 = controlDunkPID([theta_ref2, zeros(5,1)], trajectory, K_p, K_v, time5, robot);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Draw the robot
