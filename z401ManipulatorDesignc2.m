@@ -49,8 +49,8 @@ m5 = 2;
 joint_angles = [0;-pi/2;pi/2;0;0];
 joint_vel = [0;0;0;0;0];
 
-[T, ~] = basketFK(joint_angles, robot)
-x=T*[0;0;0;1]+[0;0;l1;0]
+[T, ~] = basketFK(joint_angles, robot);
+x=T*[0;0;0;1]+[0;0;l1;0];
 
 %Draw robot in the given load case
 drawBasket(joint_angles,x,robot)
@@ -93,8 +93,8 @@ M4=-w/2*(l4-x).^2;
 %Ymax1=(-w*l4^4)/(8*E*I4)
 
 %bending Stress
-Mmax=max(m4)
-c=d4/2
+Mmax=max(m4);
+c=d4/2;
 I4=(pi*d4^4)/64;
 Sy
 Sig_max=Mmax*c/I4
@@ -108,11 +108,13 @@ subplot(2,1,1)
 plot(x,V4)
 xlabel('x (m)');
 ylabel('Shear (N)');
+title('Shear plot of Link 4')
 
 subplot(2,1,2)
 plot(x,M4)
 xlabel('x (m)');
 ylabel('Moment (N-m)');
+title('Moment plot of Link 4')
 
 %% Member 3
 
@@ -134,17 +136,19 @@ subplot(2,1,1)
 plot([x1 x2],[V31 V32],'-')
 xlabel('x (m)');
 ylabel('Shear (N)');
+title('Shear plot of Link 3')
 
 subplot(2,1,2)
 plot([x1 x2],[M31 M32])
 xlabel('x (m)');
 ylabel('Moment (N-m)');
+title('Moment plot of Link 3')
 
 
 %% Member 2
 
-F2=F3+m2*g
-T2=m2*g*l2/2+T3+F3*l2
+F2=F3+m2*g;
+T2=m2*g*l2/2+T3+F3*l2;
 
 x1=linspace(0,l2/2,50);
 V21=F2+0*x1;
@@ -160,18 +164,20 @@ subplot(2,1,1)
 plot([x1 x2],[V21 V22],'-')
 xlabel('x (m)');
 ylabel('Shear (N)');
+title('Shear plot of Link 2')
 
 subplot(2,1,2)
 plot([x1 x2],[M21 M22])
 xlabel('x (m)');
 ylabel('Moment (N-m)');
+title('Moment plot of Link 2')
 
 
 %% Member 1
 
 %Reaction forces at the ground
-Rf=F2+m1*g
-Rm=T2
+Rf=F2+m1*g;
+Rm=T2;
 
 %% Deflection of upper Arm
 

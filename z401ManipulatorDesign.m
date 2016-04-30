@@ -98,11 +98,13 @@ subplot(2,1,1)
 plot(x,V4)
 xlabel('x (m)');
 ylabel('Shear (N)');
+title('Shear plot for Link 4')
 
 subplot(2,1,2)
 plot(x,M4)
 xlabel('x (m)');
 ylabel('Moment (N-m)');
+title('Moment plot for link 4')
 
 %% Member 3
 
@@ -124,24 +126,26 @@ subplot(2,1,1)
 plot([x1 x2],[V31 V32],'-')
 xlabel('x (m)');
 ylabel('Shear (N)');
+title('Shear plot for Link 3')
 
 subplot(2,1,2)
 plot([x1 x2],[M31 M32])
 xlabel('x (m)');
 ylabel('Moment (N-m)');
+title('Moment plot for Link 3')
 
 
 %% Member 2
 
-F2=F3+m2*g
+F2=F3+m2*g;
 
-T2=T3
+T2=T3;
 
 %% Member 1
 
 %Reaction forces at the ground
-Rf=F2+m1*g
-Rm=T2
+Rf=F2+m1*g;
+Rm=T2;
 
 %% Deflection of upper Arm
 
