@@ -1,14 +1,16 @@
 function [forces, moments] = z401ForceFinder(the, d_the, dd_the)
 
+robot = basketInit();
+
 % Link lengths (meters)
-l_2 = 0.9;
-l_3 = 1.6;
-l_4 = 0.180;
+l_2 = robot.parameters.l_2;
+l_3 = robot.parameters.l_3;
+l_4 = robot.parameters.l_4;
 
 % Link diameters (meters)
-d_2 = 0.045;
-d_3 = 0.045;
-d_4 = 0.045;
+d_2 = robot.parameters.d_2;
+d_3 = robot.parameters.d_3;
+d_4 = robot.parameters.d_4;
 
 % Material Properties
 rho = 2.7*10^3; % Aluminum, kg/m^3

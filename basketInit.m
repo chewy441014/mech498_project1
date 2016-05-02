@@ -7,10 +7,10 @@ l_2 = 0.900; % [m]
 l_3 = 1.600; % [m]
 l_4 = 0.180; % [m]
 
-d_1 = 0.03; % [m]
-d_2 = 0.03; % [m]
-d_3 = 0.03; % [m]
-d_4 = 0.03; % [m]
+d_1 = 0.045; % [m]
+d_2 = 0.045; % [m]
+d_3 = 0.045; % [m]
+d_4 = 0.045; % [m]
 
 % Physical Parameters for aluminium
 %http://asm.matweb.com/search/SpecificMaterial.asp?bassnum=MA6061t6
