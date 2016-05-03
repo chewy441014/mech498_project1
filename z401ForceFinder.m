@@ -2,27 +2,108 @@ function [forces, moments] = z401ForceFinder(the, d_the, dd_the)
 
 robot = basketInit();
 
-% Link lengths (meters)
-l_2 = robot.parameters.l_2;
-l_3 = robot.parameters.l_3;
-l_4 = robot.parameters.l_4;
+% %Solid links 
+% % Link lengths (meters)
+% l_2 = robot.parameters.l_2;
+% l_3 = robot.parameters.l_3;
+% l_4 = robot.parameters.l_4;
+% 
+% % Link diameters (meters)
+% d_2 = robot.parameters.d_2;
+% d_3 = robot.parameters.d_3;
+% d_4 = robot.parameters.d_4;
+% 
+% % Material Properties
+% rho = 2.7*10^3; % Aluminum, kg/m^3
+% 
+% % Link masses (kg)
+% m1 = 0;
+% m2 = pi/4*d_2^2*l_2*rho; % Link 2
+% m3 = pi/4*d_3^2*l_3*rho; % Link 3
+% m4 = 0;
+% m5 = pi/4*d_4^2*l_4*rho; % Link 4
+% m6 = 2; % Ball mass
+% m = [m1 m2 m3 m4 m5 m6];
 
-% Link diameters (meters)
+% %Hollow Links
+% 
+% % Cross-sectional areas of each arm member
+% d_1 = robot.parameters.d_1;
+% d_2 = robot.parameters.d_2;
+% d_3 = robot.parameters.d_3;
+% d_4 = robot.parameters.d_4;
+% 
+% %inner diameters for wall thickness of .0075
+% d1i = d_1-.0075;
+% d2i = d_2-.0075;
+% d3i = d_3-.0075;
+% d4i = d_4-.0075;
+% 
+% A1 = pi/4*(d_1^2-d1i^2);
+% A2 = pi/4*(d_2^2-d2i^2);
+% A3 = pi/4*(d_3^2-d3i^2);
+% A4 = pi/4*(d_4^2-d4i^2);
+% 
+% %Constants for deflection,SF
+% g = robot.const.g;
+% rho = robot.const.rho;
+% E = robot.const.E;
+% Sy = robot.const.Sy;
+% 
+% 
+% l_1 = robot.parameters.l_1;
+% l_2 = robot.parameters.l_2;
+% l_3 = robot.parameters.l_3;
+% l_4 = robot.parameters.l_4;
+% 
+% m1 = A1*l_1*rho;
+% m2 = A2*l_2*rho;
+% m3 = A3*l_3*rho;
+% m4=0;
+% m5 = A4*l_4*rho;
+% m6 = 2;
+% m = [m1 m2 m3 m4 m5 m6];
+
+%Hollow rectangular links
+
+% Cross-sectional areas of each arm member
+d_1 = robot.parameters.d_1;
 d_2 = robot.parameters.d_2;
 d_3 = robot.parameters.d_3;
 d_4 = robot.parameters.d_4;
 
-% Material Properties
-rho = 2.7*10^3; % Aluminum, kg/m^3
+%inner diameters for wall thickness of .0075
+b1 = d_1-.005;
+b2 = d_2-.005;
+b3 = d_3-.005;
+b4 = d_4-.005;
 
-% Link masses (kg)
-m1 = 0;
-m2 = pi/4*d_2^2*l_2*rho; % Link 2
-m3 = pi/4*d_3^2*l_3*rho; % Link 3
-m4 = 0;
-m5 = pi/4*d_4^2*l_4*rho; % Link 4
-m6 = 2; % Ball mass
+A1 = d_1^2-b1^2;
+A2 = d_2^2-b2^2;
+A3 = d_3^2-b3^2;
+A4 = d_4^2-b4^2;
+
+%Constants for deflection,SF
+g = robot.const.g;
+rho = robot.const.rho;
+E = robot.const.E;
+Sy = robot.const.Sy;
+
+
+l_1 = robot.parameters.l_1;
+l_2 = robot.parameters.l_2;
+l_3 = robot.parameters.l_3;
+l_4 = robot.parameters.l_4;
+
+m1 = A1*l_1*rho;
+m2 = A2*l_2*rho;
+m3 = A3*l_3*rho;
+m4=0;
+m5 = A4*l_4*rho;
+m6 = 2;
 m = [m1 m2 m3 m4 m5 m6];
+
+
 
 % Motor masses (kg)
 motor1 = 5;
