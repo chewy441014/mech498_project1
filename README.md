@@ -6,7 +6,7 @@ Amelia Bian
 Nathan Bucki
 Preston Hill
 Ian Tomkinson
-George Zhu
+George Zaimoğlu
 
 For questions:
 plh1@rice.edu
